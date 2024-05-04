@@ -27,7 +27,7 @@
   <GridPane hgap="10" styleClass="h1" vgap="10" GridPane.columnIndex="0" GridPane.rowIndex="3">
     <Label styleClass="lbl" text="2." GridPane.columnIndex="0" GridPane.rowIndex="0" />
     <Label styleClass="lbl" text="Select software" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-    <ChoiceBox fx:id="archetypeSelect" maxWidth="1000" styleClass="input-item" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+    <ChoiceBox fx:id="vstSelect" onAction="#selectVst" maxWidth="1000" styleClass="input-item" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
     </ChoiceBox>
       <columnConstraints>
          <ColumnConstraints />
@@ -70,8 +70,8 @@
    </GridPane>
    <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="7">
      <buttons>
-       <Button onAction="#startOverlay" styleClass="btn" text="Start" />
-       <Button onAction="#exit" styleClass="btn" text="Exit" />
+       <Button onAction="#startOverlay" styleClass="btn, toggle-button" text="Start" />
+       <Button onAction="#exit" styleClass="btn, toggle-button" text="Exit" />
      </buttons>
    </ButtonBar>
    <columnConstraints>
