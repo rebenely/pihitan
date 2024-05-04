@@ -1,0 +1,22 @@
+#MAIN_GRID {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-background-color: #040D12;
+    -fx-border-color: white;
+}
+
+.lbl {
+    -fx-font-size: 16;
+    -fx-text-fill: #F1F6F9;
+    -fx-font-weight: bold;
+}
+
+.note {
+    -fx-font-size: 12;
+    -fx-font-style: italic;
+    -fx-text-fill: #F1F6F9;
+}
+
+.input-item {
+    -fx-font-weight: bold;
+}
