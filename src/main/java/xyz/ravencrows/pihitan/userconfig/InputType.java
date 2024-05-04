@@ -5,7 +5,7 @@ public enum InputType {
   PIHITAN("Pihitan Pedal", "keyboard-config.fxml");
   final private String code;
   final private String fxml;
-  private InputType(String code, String fxml) {
+  InputType(String code, String fxml) {
     this.code = code;
     this.fxml = fxml;
   }

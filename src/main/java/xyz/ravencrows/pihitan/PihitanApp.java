@@ -2,16 +2,12 @@ package xyz.ravencrows.pihitan;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class PihitanApp extends Application {
     @Override

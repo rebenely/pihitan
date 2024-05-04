@@ -8,18 +8,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.stage.Stage;
-import org.controlsfx.control.action.Action;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class KeyboardConfigController implements ConfigController {
   @FXML
@@ -113,7 +108,7 @@ public class KeyboardConfigController implements ConfigController {
     Button btn = ((Button) event.getSource());
     btn.getStyleClass().add("listening");
     isListening = true;
-    final EventHandler<KeyEvent> selectKeyEvent = new EventHandler<KeyEvent>() {
+    final EventHandler<KeyEvent> selectKeyEvent = new EventHandler<>() {
       @Override
       public void handle(KeyEvent keyEvent) {
         final boolean isBackspace = keyEvent.getCode() == KeyCode.BACK_SPACE;

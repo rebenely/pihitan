@@ -45,7 +45,7 @@ public class MainController {
   public void initialize() {
     vstSelect.getItems().removeAll(vstSelect.getItems());
     vstSelect.getItems().addAll(new VstAppOption("plini-x", "Plini X"));
-    vstSelect.setConverter(new StringConverter<VstAppOption>() {
+    vstSelect.setConverter(new StringConverter<>() {
       @Override
       public String toString(VstAppOption vstAppOption) {
         // check why does this become null
