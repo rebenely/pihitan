@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class TemplateSection {
   private String id;
-  private ItemPosition defaultPos;
+  private ItemPosition pos;
   private List<TemplateItem> items;
 
   public String getId() {
@@ -18,12 +18,12 @@ public class TemplateSection {
     this.id = id;
   }
 
-  public ItemPosition getDefaultPos() {
-    return defaultPos;
+  public ItemPosition getPos() {
+    return pos;
   }
 
-  public void setDefaultPos(ItemPosition defaultPos) {
-    this.defaultPos = defaultPos;
+  public void setPos(ItemPosition defaultPos) {
+    this.pos = defaultPos;
   }
 
   public List<TemplateItem> getItems() {

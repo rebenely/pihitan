@@ -5,16 +5,32 @@
     {
       "id": "global",
       "pos": {
-        "x": 10,
-        "y": 20
+        "x": 1,
+        "y": 15
       },
       "items": [
         {
           "id": "input",
           "type": "KNOB",
           "pos": {
-            "x": 17,
+            "x": 8,
+            "y": 20
+          }
+        },
+        {
+          "id": "gate-toggle",
+          "type": "TOGGLE",
+          "pos": {
+            "x": 20,
             "y": 15
+          }
+        },
+        {
+          "id": "gate-knob",
+          "type": "KNOB",
+          "pos": {
+            "x": 20,
+            "y": 18
           }
         }
       ]
@@ -22,7 +38,7 @@
     {
       "id": "pre-fx",
       "pos": {
-        "x": 40,
+        "x": 38,
         "y": 10
       },
       "items": [
@@ -31,20 +47,24 @@
           "type": "GEAR",
           "pos": {
             "x": 17,
-            "y": 80
+            "y": 70
           },
           "items": [
             {
               "id": "comp",
               "type": "KNOB",
-              "x": 10,
-              "y": 40
+              "pos": {
+                "x": 10,
+                "y": 40
+              }
             },
             {
               "id": "level",
               "type": "KNOB",
-              "x": 25,
-              "y": 40
+              "pos": {
+                "x": 25,
+                "y": 40
+              }
             }
           ]
         },
@@ -52,29 +72,52 @@
           "id": "octaver",
           "type": "GEAR",
           "pos": {
-            "x": 40,
-            "y": 80
+            "x": 39,
+            "y": 70
           },
           "items": [
             {
               "id": "up",
               "type": "KNOB",
-              "x": 30,
-              "y": 40
+              "pos": {
+                "x": 30,
+                "y": 40
+              }
             },
             {
               "id": "down",
               "type": "KNOB",
-              "x": 40,
-              "y": 40
+              "pos": {
+                "x": 40,
+                "y": 40
+              }
             },
             {
               "id": "direct-level",
               "type": "KNOB",
-              "x": 35,
-              "y": 50
+              "pos": {
+                "x": 35,
+                "y": 50
+              }
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "amp",
+      "pos": {
+        "x": 44,
+        "y": 10
+      },
+      "items": [
+        {
+          "id": "gate-knob",
+          "type": "KNOB",
+          "pos": {
+            "x": 20,
+            "y": 18
+          }
         }
       ]
     }

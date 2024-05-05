@@ -79,7 +79,7 @@ public class KeyboardConfigController implements ConfigController {
         // remove
         newCode = "";
       } else {
-        newCode = "<SPACE>";
+        newCode = "SPACE";
       }
 
       selectedBtn.getStyleClass().remove("listening");

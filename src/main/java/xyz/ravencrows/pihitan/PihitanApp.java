@@ -18,7 +18,7 @@ public class PihitanApp extends Application {
   public void start(Stage stage) throws IOException, URISyntaxException {
     FXMLLoader fxmlLoader = new FXMLLoader(PihitanApp.class.getResource("main.fxml"));
     ScreenUtil.setupTranparentScreen(stage, fxmlLoader, "Pihitan");
-    stage.setAlwaysOnTop(true);
+    stage.setAlwaysOnTop(false);
 
     PihitanConfig config = PihitanConfig.getInstance();
 
@@ -27,11 +27,11 @@ public class PihitanApp extends Application {
             new InputConfigSettings(
                     "A",
                     "D",
-                    "S",
+                    "SPACE",
                     "Q",
                     "E",
                     "Z",
-                    "X",
+                    "C",
                     "G",
                     "H"));
 

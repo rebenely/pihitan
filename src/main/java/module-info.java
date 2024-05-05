@@ -11,6 +11,7 @@ module xyz.ravencrows.pihitan {
     exports xyz.ravencrows.pihitan.userconfig;
 
   opens xyz.ravencrows.pihitan.templates to com.google.gson;
+  opens xyz.ravencrows.pihitan.navigator to com.google.gson;
 
   exports xyz.ravencrows.pihitan.templates;
 }

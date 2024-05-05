@@ -55,44 +55,13 @@ public class MainController {
 
   @FXML
   protected void startOverlay() {
-    Stage stage = new Stage();
-    HBox root = new HBox();
-    Scene scene = new Scene(root);
-    Label label = new Label("Is it working");
+    final OverlayController controller = new OverlayController(config);
+    controller.start();
 
-    label.setStyle("-fx-text-fill: #F1F6F9");
-    label.setFont(new Font(24));
-
-    root.setAlignment(Pos.CENTER);
-    root.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5)");
-    root.getChildren().add(label);
-
-    scene.setFill(Color.TRANSPARENT);
-    scene.setCursor(Cursor.CROSSHAIR);
-
-    stage.initStyle(StageStyle.TRANSPARENT);
-    stage.setResizable(false);
-    stage.setTitle("Pihitan overlay");
-    stage.setScene(scene);
-    stage.setAlwaysOnTop(true);
-    Rectangle2D bounds = config.getDspBounds();
-    scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (KeyCode.A.equals(keyEvent.getCode())) {
-        Robot robot = new Robot();
-        robot.mouseMove(bounds.getMinX(), bounds.getMinY());
-      } else if (KeyCode.D.equals(keyEvent.getCode())) {
-        Robot robot = new Robot();
-        robot.mouseMove(bounds.getMaxX(), bounds.getMaxY());
-      }
-    });
     Stage currentStage = (Stage) inputTypeSelect.getScene().getWindow();
     currentStage.setAlwaysOnTop(false);
     currentStage.hide();
 
-    stage.show();
-    Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-    stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
-    stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
   }
 
   @FXML
