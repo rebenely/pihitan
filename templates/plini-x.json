@@ -1,0 +1,82 @@
+{
+  "id": "plini-x",
+  "name": "Plini X",
+  "sections": [
+    {
+      "id": "global",
+      "pos": {
+        "x": 10,
+        "y": 20
+      },
+      "items": [
+        {
+          "id": "input",
+          "type": "KNOB",
+          "pos": {
+            "x": 17,
+            "y": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "pre-fx",
+      "pos": {
+        "x": 40,
+        "y": 10
+      },
+      "items": [
+        {
+          "id": "compressor",
+          "type": "GEAR",
+          "pos": {
+            "x": 17,
+            "y": 80
+          },
+          "items": [
+            {
+              "id": "comp",
+              "type": "KNOB",
+              "x": 10,
+              "y": 40
+            },
+            {
+              "id": "level",
+              "type": "KNOB",
+              "x": 25,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "id": "octaver",
+          "type": "GEAR",
+          "pos": {
+            "x": 40,
+            "y": 80
+          },
+          "items": [
+            {
+              "id": "up",
+              "type": "KNOB",
+              "x": 30,
+              "y": 40
+            },
+            {
+              "id": "down",
+              "type": "KNOB",
+              "x": 40,
+              "y": 40
+            },
+            {
+              "id": "direct-level",
+              "type": "KNOB",
+              "x": 35,
+              "y": 50
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

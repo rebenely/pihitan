@@ -47,7 +47,6 @@ public class KeyboardConfigController implements ConfigController {
 
   private final PihitanConfig config = PihitanConfig.getInstance();
 
-
   @Override
   public void initController(Scene parent) {
     this.parent = parent;

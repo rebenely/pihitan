@@ -8,31 +8,38 @@ import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class PihitanApp extends Application {
-    @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(PihitanApp.class.getResource("main.fxml"));
-        ScreenUtil.setupTranparentScreen(stage, fxmlLoader, "Pihitan");
-        stage.setAlwaysOnTop(true);
+  @Override
+  public void start(Stage stage) throws IOException, URISyntaxException {
+    FXMLLoader fxmlLoader = new FXMLLoader(PihitanApp.class.getResource("main.fxml"));
+    ScreenUtil.setupTranparentScreen(stage, fxmlLoader, "Pihitan");
+    stage.setAlwaysOnTop(true);
 
-        PihitanConfig config = PihitanConfig.getInstance();
-        config.setInputSettings(
-                new InputConfigSettings(
-                        "A",
-                        "D",
-                        "S",
-                        "Q",
-                        "E",
-                        "Z",
-                        "X",
-                        "G",
-                        "H"));
+    PihitanConfig config = PihitanConfig.getInstance();
 
-        stage.show();
-    }
+    // default input settings
+    config.setInputSettings(
+            new InputConfigSettings(
+                    "A",
+                    "D",
+                    "S",
+                    "Q",
+                    "E",
+                    "Z",
+                    "X",
+                    "G",
+                    "H"));
 
-    public static void main(String[] args) {
-        launch();
-    }
+    stage.show();
+  }
+
+
+  public static void main(String[] args) {
+    launch();
+  }
 }

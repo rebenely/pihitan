@@ -1,5 +1,6 @@
 package xyz.ravencrows.pihitan;
 
+import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,14 +17,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.robot.Robot;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
-import javafx.util.StringConverter;
-import xyz.ravencrows.pihitan.userconfig.*;
+import xyz.ravencrows.pihitan.templates.Template;
+import xyz.ravencrows.pihitan.userconfig.ConfigController;
+import xyz.ravencrows.pihitan.userconfig.InputType;
+import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class MainController {
@@ -32,33 +39,15 @@ public class MainController {
 
   private int step;
 
-  private InputConfigSettings inputConfigSettings;
-
   private final PihitanConfig config = PihitanConfig.getInstance();
 
   @FXML
-  protected ChoiceBox<VstAppOption> vstSelect;
+  protected Button templateSelectBtn;
   @FXML
   protected ChoiceBox<String> inputTypeSelect;
 
   @FXML
   public void initialize() {
-    vstSelect.getItems().removeAll(vstSelect.getItems());
-    vstSelect.getItems().addAll(new VstAppOption("plini-x", "Plini X"));
-    vstSelect.setConverter(new StringConverter<>() {
-      @Override
-      public String toString(VstAppOption vstAppOption) {
-        // check why does this become null
-        // vstSelect is initialized in fxml
-        return vstAppOption == null ? null : vstAppOption.label();
-      }
-
-      @Override
-      public VstAppOption fromString(String label) {
-        return vstSelect.getItems().stream().filter(item -> item.label().equals(label)).findFirst().orElse(null);
-      }
-    });
-
     inputTypeSelect.getItems().removeAll(inputTypeSelect.getItems());
     inputTypeSelect.getItems().addAll("Keyboard", "Pihitan Pedal");
     inputTypeSelect.getSelectionModel().select("Keyboard");
@@ -127,7 +116,7 @@ public class MainController {
   }
 
   @FXML
-  protected void determineWindowSize(ActionEvent event) {
+  protected void determineWindowSize() {
     Stage stage = new Stage();
     HBox root = new HBox();
     Scene scene = new Scene(root);
@@ -176,8 +165,27 @@ public class MainController {
   }
 
   @FXML
-  protected void selectVst(ActionEvent event) {
-    System.out.println(vstSelect.getValue());
-    config.setVstApp(vstSelect.getValue());
+  protected void selectTemplate() throws IOException {
+    final FileChooser fileChooser = new FileChooser();
+    final Stage stage = (Stage) templateSelectBtn.getScene().getWindow();
+    fileChooser.setInitialDirectory(new File("."));
+    fileChooser.getExtensionFilters().addAll(
+      new FileChooser.ExtensionFilter("Pihitan Templates", "*.json")
+    );
+
+    final File selectedFile = fileChooser.showOpenDialog(stage);
+    if(selectedFile == null) {
+      System.out.println("No file selected");
+      return;
+    }
+    Gson gson = new Gson();
+
+    try(final BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
+      Template template = gson.fromJson(br, Template.class);
+      templateSelectBtn.setText(template.getName());
+
+      config.setTemplate(template);
+    }
+
   }
 }

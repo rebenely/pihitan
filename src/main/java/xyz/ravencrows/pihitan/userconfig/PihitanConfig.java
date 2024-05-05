@@ -1,6 +1,7 @@
 package xyz.ravencrows.pihitan.userconfig;
 
 import javafx.geometry.Rectangle2D;
+import xyz.ravencrows.pihitan.templates.Template;
 
 /**
  * Singleton config for the app
@@ -11,7 +12,7 @@ public class PihitanConfig {
   private InputType inputType;
   private InputConfigSettings inputSettings;
 
-  private VstAppOption vstAppOption;
+  private Template template;
 
   public static PihitanConfig getInstance() {
     return instance;
@@ -41,11 +42,11 @@ public class PihitanConfig {
     this.inputSettings = inputSettings;
   }
 
-  public VstAppOption getVstApp() {
-    return vstAppOption;
+  public Template getTemplate() {
+    return template;
   }
 
-  public void setVstApp(VstAppOption vstAppOption) {
-    this.vstAppOption = vstAppOption;
+  public void setTemplate(Template template) {
+    this.template = template;
   }
 }
