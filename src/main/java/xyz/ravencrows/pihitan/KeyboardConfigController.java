@@ -1,13 +1,14 @@
 package xyz.ravencrows.pihitan;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
@@ -18,30 +19,31 @@ import java.util.Optional;
 
 public class KeyboardConfigController implements ConfigController {
   @FXML
-  private Button turnLeftKey;
+  public GridPane mainBody;
   @FXML
-  private Button turnRightKey;
+  private Label turnLeftKey;
   @FXML
-  private Button pressKey;
+  private Label turnRightKey;
   @FXML
-  private Button navRight;
+  private Label pressKey;
   @FXML
-  private Button navLeft;
+  private Label navRight;
   @FXML
-  private Button navItemRight;
+  private Label navLeft;
   @FXML
-  private Button navItemLeft;
+  private Label navItemRight;
   @FXML
-  private Button presetLeft;
+  private Label navItemLeft;
   @FXML
-  private Button presetRight;
+  private Label presetLeft;
+  @FXML
+  private Label presetRight;
 
-  private List<Button> buttons;
+  private List<Label> buttons;
 
   private Scene parent;
 
-
-  private boolean isListening = false;
+  private Label selectedBtn = null;
 
   private final PihitanConfig config = PihitanConfig.getInstance();
 
@@ -54,6 +56,50 @@ public class KeyboardConfigController implements ConfigController {
   @FXML
   public void initialize() {
     InputConfigSettings keys = config.getInputSettings();
+
+    // add key listener
+    mainBody.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+      final boolean isListening = selectedBtn != null;
+      if(!isListening) {
+        return;
+      }
+
+      KeyCode code = keyEvent.getCode();
+      final boolean isBackspace = code == KeyCode.BACK_SPACE;
+      final boolean isAlphanumeric = code.isLetterKey() || code.isDigitKey();
+      final boolean isSpace = code == KeyCode.SPACE;
+      if (!isAlphanumeric && !isBackspace && !isSpace) {
+        keyEvent.consume();
+        return;
+      }
+
+      final String newCode;
+      if (isAlphanumeric) {
+        newCode = keyEvent.getText().toUpperCase();
+      } else if (isBackspace) {
+        // remove
+        newCode = "";
+      } else {
+        newCode = "<SPACE>";
+      }
+
+      selectedBtn.getStyleClass().remove("listening");
+      selectedBtn.setText(newCode);
+
+      if(isBackspace) {
+        return;
+      }
+
+      // Remove existing similar code
+      Optional<Label> similarCode = buttons
+              .stream()
+              .filter(existingBrn -> !selectedBtn.equals(existingBrn) && newCode.equals(existingBrn.getText().toUpperCase()))
+              .findFirst();
+      similarCode.ifPresent(button -> button.setText(""));
+
+      // remove listening
+      selectedBtn = null;
+    });
 
     // get values from existing config
     turnLeftKey.setText(keys.turnLeft());
@@ -101,42 +147,13 @@ public class KeyboardConfigController implements ConfigController {
     stage.setScene(parent);
   }
 
-  public void listenToKeyBtn(ActionEvent event) {
-    if (isListening) {
+  public void listenToKeyBtn(MouseEvent event) {
+    if (selectedBtn != null) {
       return;
     }
-    Button btn = ((Button) event.getSource());
+    Label btn = ((Label) event.getSource());
     btn.getStyleClass().add("listening");
-    isListening = true;
-    final EventHandler<KeyEvent> selectKeyEvent = new EventHandler<>() {
-      @Override
-      public void handle(KeyEvent keyEvent) {
-        final boolean isBackspace = keyEvent.getCode() == KeyCode.BACK_SPACE;
-        final boolean isAlphanumeric = keyEvent.getCode().isLetterKey() || keyEvent.getCode().isDigitKey();
-        if (!isAlphanumeric && !isBackspace) {
-          keyEvent.consume();
-          return;
-        }
-
-        final String newCode = keyEvent.getText().toUpperCase();
-
-        btn.getStyleClass().remove("listening");
-        isListening = false;
-        btn.removeEventHandler(KeyEvent.KEY_PRESSED, this);
-        btn.setText(isBackspace ? "" : newCode);
-
-        if(isBackspace) {
-          return;
-        }
-
-        // Remove existing similar code
-        Optional<Button> similarCode = buttons
-                .stream()
-                .filter(existingBrn -> !btn.equals(existingBrn) && newCode.equals(existingBrn.getText().toUpperCase()))
-                .findFirst();
-        similarCode.ifPresent(button -> button.setText(""));
-      }
-    };
-    btn.addEventFilter(KeyEvent.KEY_PRESSED, selectKeyEvent);
+    btn.requestFocus();
+    selectedBtn = btn;
   }
 }
