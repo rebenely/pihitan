@@ -105,18 +105,30 @@
       ]
     },
     {
-      "id": "amp",
+      "id": "amp-clean",
       "pos": {
-        "x": 44,
+        "x": 43,
+        "y": 93
+      },
+      "preStep": {
+        "x": 42,
         "y": 10
       },
       "items": [
         {
-          "id": "gate-knob",
+          "id": "gain",
           "type": "KNOB",
           "pos": {
-            "x": 20,
-            "y": 18
+            "x": 25,
+            "y": 75
+          }
+        },
+        {
+          "id": "bright",
+          "type": "TOGGLE",
+          "pos": {
+            "x": 29,
+            "y": 75
           }
         }
       ]

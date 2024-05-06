@@ -5,6 +5,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
+import xyz.ravencrows.pihitan.templates.ItemPosition;
 import xyz.ravencrows.pihitan.templates.ItemType;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.templates.TemplateItem;
@@ -56,6 +57,11 @@ public class ScreenNavigator {
     template.getSections().forEach(section -> {
       final NavigatorPos currPos = NavigatorPos.fromItem(section.getPos(), externalAppBounds);
       final NavigatorSection sec = new NavigatorSection(section.getId(), currPos);
+
+      final ItemPosition preStep = section.getPreStep();
+      if (preStep != null) {
+        sec.setPreStep(NavigatorPos.fromItem(section.getPreStep(), externalAppBounds));
+      }
 
       // get items and flatten
       final List<NavigatorItem> flattenedItems = new ArrayList<>(buildItem(section.getItems(), currPos, section.getId()));
@@ -132,6 +138,16 @@ public class ScreenNavigator {
   public void press(Scene scene) {
     // this means user is currently navigating through sections
     if(currItem == null) {
+      final NavigatorSection section = sections.get(currSection);
+      final NavigatorPos preStep = sections.get(currSection).getPreStep();
+      if (preStep != null) {
+        robot.mouseMove(preStep.getX(), preStep.getY());
+        robot.mousePress(MouseButton.PRIMARY);
+
+        // move mouse back
+        robot.mouseMove(section.getPos().getX(), section.getPos().getY());
+      }
+
       // press mouse on the current loc
       robot.mousePress(MouseButton.PRIMARY);
       // update section

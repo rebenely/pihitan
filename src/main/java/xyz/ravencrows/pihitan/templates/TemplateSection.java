@@ -10,6 +10,8 @@ public class TemplateSection {
   private ItemPosition pos;
   private List<TemplateItem> items;
 
+  private ItemPosition preStep;
+
   public String getId() {
     return id;
   }
@@ -32,5 +34,13 @@ public class TemplateSection {
 
   public void setItems(List<TemplateItem> items) {
     this.items = items;
+  }
+
+  public ItemPosition getPreStep() {
+    return preStep;
+  }
+
+  public void setPreStep(ItemPosition preStep) {
+    this.preStep = preStep;
   }
 }

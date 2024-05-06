@@ -9,6 +9,8 @@ public class NavigatorSection {
 
   private NavigatorPos pos;
 
+  private NavigatorPos preStep;
+
   private List<NavigatorItem> items;
 
   public NavigatorSection(String id, NavigatorPos pos) {
@@ -38,5 +40,13 @@ public class NavigatorSection {
 
   public void setItems(List<NavigatorItem> items) {
     this.items = items;
+  }
+
+  public NavigatorPos getPreStep() {
+    return preStep;
+  }
+
+  public void setPreStep(NavigatorPos preStep) {
+    this.preStep = preStep;
   }
 }
