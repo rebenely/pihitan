@@ -185,11 +185,18 @@ public class ScreenNavigator {
   }
 
   public void navigate(PihitanAction pihitanAction, Scene scene) {
+    System.out.println(pihitanAction);
     switch (pihitanAction) {
       case KNOB_LEFT:
+      this.turnKnobLeft();
+      break;
+      case KNOB_RIGHT:
+        this.turnKnobRight();
+        break;
+      case PREV_SECTION:
         this.moveToPreviousSection();
         break;
-      case KNOB_RIGHT:
+      case NEXT_SECTION:
         this.moveToNextSection();
         break;
       case PRESS:

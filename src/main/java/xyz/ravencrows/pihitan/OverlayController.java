@@ -1,24 +1,16 @@
 package xyz.ravencrows.pihitan;
 
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.robot.Robot;
 import javafx.scene.text.Font;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import xyz.ravencrows.pihitan.input.InputListener;
-import xyz.ravencrows.pihitan.input.KeyboardInputListener;
-import xyz.ravencrows.pihitan.navigator.NavigatorSection;
 import xyz.ravencrows.pihitan.navigator.ScreenNavigator;
-import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 
 /**
@@ -57,23 +49,12 @@ public class OverlayController {
     stage.setTitle("Pihitan overlay");
     stage.setScene(scene);
     stage.setAlwaysOnTop(true);
-//    Rectangle2D bounds = config.getDspBounds();
-//    scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-//      if (KeyCode.A.equals(keyEvent.getCode())) {
-//        Robot robot = new Robot();
-//        robot.mouseMove(bounds.getMinX(), bounds.getMinY());
-//      } else if (KeyCode.D.equals(keyEvent.getCode())) {
-//        Robot robot = new Robot();
-//        robot.mouseMove(bounds.getMaxX(), bounds.getMaxY());
-//      }
-//    });
 
-    InputListener kbListener = new KeyboardInputListener();
-    kbListener.start(scene, navigator);
+    InputListener listener = config.getInput();
+    listener.listenToSceneAction(scene, actionCode -> {
+      navigator.navigate(actionCode, scene);
+    });
 
     stage.show();
-//    Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-//    stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
-//    stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
   }
 }

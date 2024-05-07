@@ -1,7 +1,6 @@
 package xyz.ravencrows.pihitan.navigator;
 
 import javafx.geometry.Rectangle2D;
-import xyz.ravencrows.pihitan.templates.ItemPosition;
 import xyz.ravencrows.pihitan.templates.TemplateItem;
 
 public class NavigatorItem {

@@ -15,7 +15,10 @@ import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class InputConfigController implements ConfigController {
@@ -70,7 +73,7 @@ public class InputConfigController implements ConfigController {
 
     final InputListener listener = config.getInput();
     final List<InputConfigSettings> actions = listener.getKeys();
-    listener.listen(mainBody, inputCode -> {
+    listener.listenToRoot(mainBody, inputCode -> {
       final boolean isListening = selectedBtn != null;
       if(!isListening) {
         return;
@@ -95,50 +98,6 @@ public class InputConfigController implements ConfigController {
       // remove listening
       selectedBtn = null;
     });
-//    // add key listener
-//    mainBody.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-//      final boolean isListening = selectedBtn != null;
-//      if(!isListening) {
-//        return;
-//      }
-//
-//      KeyCode code = keyEvent.getCode();
-//      final boolean isBackspace = code == KeyCode.BACK_SPACE;
-//      final boolean isAlphanumeric = code.isLetterKey() || code.isDigitKey();
-//      final boolean isSpace = code == KeyCode.SPACE;
-//      if (!isAlphanumeric && !isBackspace && !isSpace) {
-//        keyEvent.consume();
-//        return;
-//      }
-//
-//      final String newCode;
-//      if (isAlphanumeric) {
-//        newCode = keyEvent.getText().toUpperCase();
-//      } else if (isBackspace) {
-//        // remove
-//        newCode = "";
-//      } else {
-//        newCode = "SPACE";
-//      }
-//
-//      selectedBtn.getStyleClass().remove("listening");
-//      selectedBtn.setText(newCode);
-//
-//      if(isBackspace) {
-//        return;
-//      }
-//
-//      // Remove existing similar code
-//      Optional<Label> similarCode = buttons
-//              .values()
-//              .stream()
-//              .filter(existingBrn -> !selectedBtn.equals(existingBrn) && (existingBrn.getText() != null && newCode.equals(existingBrn.getText().toUpperCase())))
-//              .findFirst();
-//      similarCode.ifPresent(button -> button.setText(""));
-//
-//      // remove listening
-//      selectedBtn = null;
-//    });
 
     // this is assumed to be a proper bimap :)
     Map<PihitanAction, String> actionsMapped =
@@ -151,15 +110,6 @@ public class InputConfigController implements ConfigController {
       final Label btn = entry.getValue();
       btn.setText(actionsMapped.get(entry.getKey()));
     }
-//    turnLeftKey.setText(actionsMapped.get(PihitanAction.KNOB_LEFT));
-//    turnRightKey.setText(actionsMapped.get(PihitanAction.KNOB_RIGHT));
-//    pressKey.setText(actionsMapped.get(PihitanAction.PRESS));
-//    navLeft.setText(actionsMapped.get(PihitanAction.PREV_SECTION));
-//    navRight.setText(actionsMapped.get(PihitanAction.NEXT_SECTION));
-//    navItemLeft.setText(actionsMapped.get(PihitanAction.PREV_ITEM));
-//    navItemRight.setText(actionsMapped.get(PihitanAction.NEXT_ITEM));
-//    presetLeft.setText(actionsMapped.get(PihitanAction.PREV_PRESET));
-//    presetRight.setText(actionsMapped.get(PihitanAction.NEXT_PRESET));
   }
 
   public void save(ActionEvent event) {
@@ -169,12 +119,12 @@ public class InputConfigController implements ConfigController {
       final Label btn = entry.getValue();
       final String btnKey = btn.getText();
       if(btnKey != null) {
+        System.out.println(entry.getKey() + " = " + btnKey);
         newActions.add(new InputConfigSettings(entry.getKey(), btnKey));
       }
     }
 
     config.getInput().setKeys(newActions);
-
     exit(event);
   }
 

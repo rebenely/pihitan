@@ -19,16 +19,16 @@
   <Label fx:id="pressKey" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
   <Label styleClass="lbl" text="Prev Tab" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-  <Label fx:id="navRight" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+  <Label fx:id="navLeft" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
   <Label styleClass="lbl" text="Next Tab" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-  <Label fx:id="navLeft" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+  <Label fx:id="navRight" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
   <Label styleClass="lbl" text="Prev Item" GridPane.columnIndex="0" GridPane.rowIndex="5" />
-  <Label fx:id="navItemRight" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+  <Label fx:id="navItemLeft" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
   <Label styleClass="lbl" text="Next Item" GridPane.columnIndex="0" GridPane.rowIndex="6" />
-  <Label fx:id="navItemLeft" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+  <Label fx:id="navItemRight" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
   <Label styleClass="lbl" text="Prev preset" GridPane.columnIndex="0" GridPane.rowIndex="7" />
   <Label fx:id="presetLeft" onMousePressed="#listenToKeyBtn" prefWidth="200.0" styleClass="toggle-button" GridPane.columnIndex="1" GridPane.rowIndex="7" />
