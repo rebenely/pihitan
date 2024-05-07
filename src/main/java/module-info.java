@@ -14,4 +14,6 @@ module xyz.ravencrows.pihitan {
   opens xyz.ravencrows.pihitan.navigator to com.google.gson;
 
   exports xyz.ravencrows.pihitan.templates;
+  exports xyz.ravencrows.pihitan.input;
+  exports xyz.ravencrows.pihitan.navigator;
 }

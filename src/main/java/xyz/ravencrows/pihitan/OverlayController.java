@@ -69,7 +69,7 @@ public class OverlayController {
 //    });
 
     InputListener kbListener = new KeyboardInputListener();
-    kbListener.start(scene, navigator, config.getInputSettings());
+    kbListener.start(scene, navigator);
 
     stage.show();
 //    Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();

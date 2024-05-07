@@ -10,12 +10,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import xyz.ravencrows.pihitan.input.InputListener;
+import xyz.ravencrows.pihitan.input.PihitanAction;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class KeyboardConfigController implements ConfigController {
   @FXML
@@ -39,7 +41,7 @@ public class KeyboardConfigController implements ConfigController {
   @FXML
   private Label presetRight;
 
-  private List<Label> buttons;
+  private Map<PihitanAction, Label> buttons;
 
   private Scene parent;
 
@@ -54,7 +56,21 @@ public class KeyboardConfigController implements ConfigController {
 
   @FXML
   public void initialize() {
-    InputConfigSettings keys = config.getInputSettings();
+    System.out.println("Run init");
+    buttons = Map.of(
+            PihitanAction.KNOB_LEFT, turnLeftKey,
+            PihitanAction.KNOB_RIGHT, turnRightKey,
+            PihitanAction.PRESS, pressKey,
+            PihitanAction.PREV_SECTION, navLeft,
+            PihitanAction.NEXT_SECTION, navRight,
+            PihitanAction.PREV_ITEM, navItemLeft,
+            PihitanAction.NEXT_ITEM, navItemRight,
+            PihitanAction.PREV_PRESET, presetLeft,
+            PihitanAction.NEXT_PRESET, presetRight
+    );
+
+    InputListener listener = config.getInput();
+    List<InputConfigSettings> actions = listener.getKeys();
 
     // add key listener
     mainBody.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
@@ -91,8 +107,9 @@ public class KeyboardConfigController implements ConfigController {
 
       // Remove existing similar code
       Optional<Label> similarCode = buttons
+              .values()
               .stream()
-              .filter(existingBrn -> !selectedBtn.equals(existingBrn) && newCode.equals(existingBrn.getText().toUpperCase()))
+              .filter(existingBrn -> !selectedBtn.equals(existingBrn) && (existingBrn.getText() != null && newCode.equals(existingBrn.getText().toUpperCase())))
               .findFirst();
       similarCode.ifPresent(button -> button.setText(""));
 
@@ -100,46 +117,44 @@ public class KeyboardConfigController implements ConfigController {
       selectedBtn = null;
     });
 
-    // get values from existing config
-    turnLeftKey.setText(keys.turnLeft());
-    turnRightKey.setText(keys.turnRight());
-    pressKey.setText(keys.press());
-    navLeft.setText(keys.navLeft());
-    navRight.setText(keys.navRight());
-    navItemLeft.setText(keys.navItemLeft());
-    navItemRight.setText(keys.navItemRight());
-    presetLeft.setText(keys.prevPreset());
-    presetRight.setText(keys.nextPreset());
+    // this is assumed to be a proper bimap :)
+    Map<PihitanAction, String> actionsMapped =
+            actions
+            .stream()
+            .collect(Collectors.toMap(InputConfigSettings::getAction, InputConfigSettings::getInputCode));
 
-    buttons = List.of(
-            turnLeftKey,
-            turnRightKey,
-            pressKey,
-            navLeft,
-            navRight,
-            navItemLeft,
-            navItemRight,
-            presetLeft,
-            presetRight);
+    // get values from existing config
+    for (Map.Entry<PihitanAction, Label> entry : buttons.entrySet()) {
+      final Label btn = entry.getValue();
+      btn.setText(actionsMapped.get(entry.getKey()));
+    }
+//    turnLeftKey.setText(actionsMapped.get(PihitanAction.KNOB_LEFT));
+//    turnRightKey.setText(actionsMapped.get(PihitanAction.KNOB_RIGHT));
+//    pressKey.setText(actionsMapped.get(PihitanAction.PRESS));
+//    navLeft.setText(actionsMapped.get(PihitanAction.PREV_SECTION));
+//    navRight.setText(actionsMapped.get(PihitanAction.NEXT_SECTION));
+//    navItemLeft.setText(actionsMapped.get(PihitanAction.PREV_ITEM));
+//    navItemRight.setText(actionsMapped.get(PihitanAction.NEXT_ITEM));
+//    presetLeft.setText(actionsMapped.get(PihitanAction.PREV_PRESET));
+//    presetRight.setText(actionsMapped.get(PihitanAction.NEXT_PRESET));
   }
 
   public void save(ActionEvent event) {
-    config.setInputSettings(
-      new InputConfigSettings(
-        turnLeftKey.getText(),
-        turnRightKey.getText(),
-        pressKey.getText(),
-        navLeft.getText(),
-        navRight.getText(),
-        navItemLeft.getText(),
-        navItemRight.getText(),
-        presetLeft.getText(),
-        presetRight.getText()
-      )
-    );
+    List<InputConfigSettings> newActions = new ArrayList<>();
+
+    for (Map.Entry<PihitanAction, Label> entry : buttons.entrySet()) {
+      final Label btn = entry.getValue();
+      final String btnKey = btn.getText();
+      if(btnKey != null) {
+        newActions.add(new InputConfigSettings(entry.getKey(), btnKey));
+      }
+    }
+
+    config.getInput().setKeys(newActions);
 
     exit(event);
   }
+
 
   public void exit(ActionEvent event) {
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

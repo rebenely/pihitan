@@ -3,15 +3,13 @@ package xyz.ravencrows.pihitan;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class PihitanApp extends Application {
   @Override
@@ -21,19 +19,7 @@ public class PihitanApp extends Application {
     stage.setAlwaysOnTop(false);
 
     PihitanConfig config = PihitanConfig.getInstance();
-
-    // default input settings
-    config.setInputSettings(
-            new InputConfigSettings(
-                    "A",
-                    "D",
-                    "SPACE",
-                    "Q",
-                    "E",
-                    "Z",
-                    "C",
-                    "G",
-                    "H"));
+    config.setInput(new KeyboardInputListener());
 
     stage.show();
   }

@@ -1,33 +1,41 @@
 package xyz.ravencrows.pihitan.input;
 
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.robot.Robot;
 import xyz.ravencrows.pihitan.navigator.ScreenNavigator;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class KeyboardInputListener implements InputListener {
+  private List<InputConfigSettings> actions;
+  public KeyboardInputListener() {
+    actions = new ArrayList<>();
+  }
+
   @Override
-  public void start(Scene scene, ScreenNavigator navigator, InputConfigSettings settings) {
+  public void start(Scene scene, ScreenNavigator navigator) {
     scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
       final String keyName = keyEvent.getCode().getName().toUpperCase();
-
-      if (keyName.equals(settings.navLeft())) {
-        navigator.moveToPreviousSection();
-      } else if (keyName.equals(settings.navRight())) {
-        navigator.moveToNextSection();
-      } else if (keyName.equals(settings.press())) {
-        navigator.press(scene);
-      } else if (keyName.equals(settings.navItemLeft())) {
-        navigator.moveToPreviousItem();
-      } else if (keyName.equals(settings.navItemRight())) {
-        navigator.moveToNextItem();
-      } else if (keyName.equals(settings.turnLeft())) {
-        navigator.turnKnobLeft();;
-      } else if (keyName.equals(settings.turnRight())) {
-        navigator.turnKnobRight();
-      }
+      // TODO create map from actions
+//      if(actions.containsKey(keyName)) {
+//        navigator.navigate(actions.get(keyName), scene);
+//      }
     });
   }
+
+  @Override
+  public void setKeys(List<InputConfigSettings> actions) {
+    this.actions.clear();
+    this.actions.addAll(actions);
+  }
+
+  @Override
+  public List<InputConfigSettings> getKeys() {
+    return actions;
+  }
+
 }

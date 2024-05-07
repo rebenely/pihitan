@@ -22,6 +22,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.InputType;
@@ -73,6 +74,7 @@ public class MainController {
     // Pass parent scene so we can go back
     ConfigController configController = loader.getController();
     configController.initController(inputTypeSelect.getScene());
+
 
     // Get the current stage
     Stage currentStage = (Stage) inputTypeSelect.getScene().getWindow();

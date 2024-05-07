@@ -1,6 +1,7 @@
 package xyz.ravencrows.pihitan.userconfig;
 
 import javafx.geometry.Rectangle2D;
+import xyz.ravencrows.pihitan.input.InputListener;
 import xyz.ravencrows.pihitan.templates.Template;
 
 /**
@@ -10,9 +11,11 @@ public class PihitanConfig {
   private final static PihitanConfig instance = new PihitanConfig();
   private Rectangle2D dspBounds;
   private InputType inputType;
-  private InputConfigSettings inputSettings;
+
+  private InputListener input;
 
   private Template template;
+
 
   public static PihitanConfig getInstance() {
     return instance;
@@ -34,12 +37,12 @@ public class PihitanConfig {
     this.inputType = inputType;
   }
 
-  public InputConfigSettings getInputSettings() {
-    return inputSettings;
+  public InputListener getInput() {
+    return input;
   }
 
-  public void setInputSettings(InputConfigSettings inputSettings) {
-    this.inputSettings = inputSettings;
+  public void setInput(InputListener input) {
+    this.input = input;
   }
 
   public Template getTemplate() {

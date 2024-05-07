@@ -5,6 +5,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
+import xyz.ravencrows.pihitan.PihitanApp;
+import xyz.ravencrows.pihitan.input.PihitanAction;
 import xyz.ravencrows.pihitan.templates.ItemPosition;
 import xyz.ravencrows.pihitan.templates.ItemType;
 import xyz.ravencrows.pihitan.templates.Template;
@@ -180,5 +182,25 @@ public class ScreenNavigator {
 
   public void turnKnobRight() {
     robot.mouseWheel(-1);
+  }
+
+  public void navigate(PihitanAction pihitanAction, Scene scene) {
+    switch (pihitanAction) {
+      case KNOB_LEFT:
+        this.moveToPreviousSection();
+        break;
+      case KNOB_RIGHT:
+        this.moveToNextSection();
+        break;
+      case PRESS:
+        this.press(scene);
+        break;
+      case PREV_ITEM:
+        this.moveToPreviousItem();
+        break;
+      case NEXT_ITEM:
+        this.moveToNextItem();
+        break;
+    }
   }
 }
