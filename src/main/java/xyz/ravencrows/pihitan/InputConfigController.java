@@ -5,12 +5,11 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import xyz.ravencrows.pihitan.input.InputListener;
+import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.PihitanAction;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
@@ -19,7 +18,7 @@ import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class KeyboardConfigController implements ConfigController {
+public class InputConfigController implements ConfigController {
   @FXML
   public GridPane mainBody;
   @FXML
@@ -69,37 +68,17 @@ public class KeyboardConfigController implements ConfigController {
             PihitanAction.NEXT_PRESET, presetRight
     );
 
-    InputListener listener = config.getInput();
-    List<InputConfigSettings> actions = listener.getKeys();
-
-    // add key listener
-    mainBody.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+    final InputListener listener = config.getInput();
+    final List<InputConfigSettings> actions = listener.getKeys();
+    listener.listen(mainBody, inputCode -> {
       final boolean isListening = selectedBtn != null;
       if(!isListening) {
         return;
       }
 
-      KeyCode code = keyEvent.getCode();
-      final boolean isBackspace = code == KeyCode.BACK_SPACE;
-      final boolean isAlphanumeric = code.isLetterKey() || code.isDigitKey();
-      final boolean isSpace = code == KeyCode.SPACE;
-      if (!isAlphanumeric && !isBackspace && !isSpace) {
-        keyEvent.consume();
-        return;
-      }
-
-      final String newCode;
-      if (isAlphanumeric) {
-        newCode = keyEvent.getText().toUpperCase();
-      } else if (isBackspace) {
-        // remove
-        newCode = "";
-      } else {
-        newCode = "SPACE";
-      }
-
+      final boolean isBackspace = inputCode.isSpecialKey() && KeyboardInputListener.BACKSPACE.equals(inputCode.code());
       selectedBtn.getStyleClass().remove("listening");
-      selectedBtn.setText(newCode);
+      selectedBtn.setText(isBackspace ? "" : inputCode.code());
 
       if(isBackspace) {
         return;
@@ -109,13 +88,57 @@ public class KeyboardConfigController implements ConfigController {
       Optional<Label> similarCode = buttons
               .values()
               .stream()
-              .filter(existingBrn -> !selectedBtn.equals(existingBrn) && (existingBrn.getText() != null && newCode.equals(existingBrn.getText().toUpperCase())))
+              .filter(existingBtn -> !selectedBtn.equals(existingBtn) && (existingBtn.getText() != null && inputCode.code().equals(existingBtn.getText().toUpperCase())))
               .findFirst();
       similarCode.ifPresent(button -> button.setText(""));
 
       // remove listening
       selectedBtn = null;
     });
+//    // add key listener
+//    mainBody.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+//      final boolean isListening = selectedBtn != null;
+//      if(!isListening) {
+//        return;
+//      }
+//
+//      KeyCode code = keyEvent.getCode();
+//      final boolean isBackspace = code == KeyCode.BACK_SPACE;
+//      final boolean isAlphanumeric = code.isLetterKey() || code.isDigitKey();
+//      final boolean isSpace = code == KeyCode.SPACE;
+//      if (!isAlphanumeric && !isBackspace && !isSpace) {
+//        keyEvent.consume();
+//        return;
+//      }
+//
+//      final String newCode;
+//      if (isAlphanumeric) {
+//        newCode = keyEvent.getText().toUpperCase();
+//      } else if (isBackspace) {
+//        // remove
+//        newCode = "";
+//      } else {
+//        newCode = "SPACE";
+//      }
+//
+//      selectedBtn.getStyleClass().remove("listening");
+//      selectedBtn.setText(newCode);
+//
+//      if(isBackspace) {
+//        return;
+//      }
+//
+//      // Remove existing similar code
+//      Optional<Label> similarCode = buttons
+//              .values()
+//              .stream()
+//              .filter(existingBrn -> !selectedBtn.equals(existingBrn) && (existingBrn.getText() != null && newCode.equals(existingBrn.getText().toUpperCase())))
+//              .findFirst();
+//      similarCode.ifPresent(button -> button.setText(""));
+//
+//      // remove listening
+//      selectedBtn = null;
+//    });
 
     // this is assumed to be a proper bimap :)
     Map<PihitanAction, String> actionsMapped =

@@ -1,8 +1,8 @@
 package xyz.ravencrows.pihitan.userconfig;
 
 public enum InputType {
-  KEYBOARD("Keyboard", "keyboard-config.fxml"),
-  PIHITAN("Pihitan Pedal", "keyboard-config.fxml");
+  KEYBOARD("Keyboard", "input-config.fxml"),
+  PIHITAN("Pihitan Pedal", "input-config.fxml");
   final private String code;
   final private String fxml;
   InputType(String code, String fxml) {

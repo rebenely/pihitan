@@ -1,12 +1,12 @@
 package xyz.ravencrows.pihitan.input;
 
 import javafx.scene.Scene;
-import org.controlsfx.control.action.Action;
+import javafx.scene.layout.Pane;
 import xyz.ravencrows.pihitan.navigator.ScreenNavigator;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 
 import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
 public interface InputListener {
   void start(Scene scene, ScreenNavigator navigator);
@@ -14,4 +14,6 @@ public interface InputListener {
   void setKeys(List<InputConfigSettings> actions);
 
   List<InputConfigSettings> getKeys();
+
+  void listen(Pane pane, Consumer<InputCode> inputConsumer);
 }

@@ -4,7 +4,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
-import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
