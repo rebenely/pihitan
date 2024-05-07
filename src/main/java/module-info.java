@@ -5,6 +5,7 @@ module xyz.ravencrows.pihitan {
     requires org.controlsfx.controls;
     requires org.kordamp.bootstrapfx.core;
   requires com.google.gson;
+  requires Jamepad;
 
   opens xyz.ravencrows.pihitan to javafx.fxml;
     exports xyz.ravencrows.pihitan;

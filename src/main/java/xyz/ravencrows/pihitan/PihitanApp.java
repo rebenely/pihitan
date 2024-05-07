@@ -1,5 +1,7 @@
 package xyz.ravencrows.pihitan;
 
+import com.studiohartman.jamepad.ControllerManager;
+import com.studiohartman.jamepad.ControllerState;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -19,6 +21,21 @@ public class PihitanApp extends Application {
 
     PihitanConfig config = PihitanConfig.getInstance();
     config.setInput(new KeyboardInputListener());
+
+    ControllerManager controllers = new ControllerManager();
+    controllers.initSDLGamepad();
+
+    int i = controllers.getNumControllers();
+    while(true) {
+      ControllerState currState = controllers.getState(0);
+
+      if(!currState.isConnected || currState.b) {
+        break;
+      }
+      if(currState.a) {
+        System.out.println("\"A\" on \"" + currState.controllerType + "\" is pressed");
+      }
+    }
 
     stage.show();
   }
