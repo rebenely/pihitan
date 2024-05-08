@@ -27,11 +27,30 @@ public class SDLGamepadInputListener implements InputListener {
   private volatile long lastPressMillis = 0;
   private static final long DEBOUNCE_DURATION = 200;
 
-  public SDLGamepadInputListener(ArrayList<InputConfigSettings> actions, SDL2Controller controller, SDL2ControllerManager manager) {
-    this.actions = actions;
+  public SDLGamepadInputListener(SDL2Controller controller, SDL2ControllerManager manager) {
+    this.actions = defaults();
     this.manager = manager;
     this.controller = controller;
     this.isRunning = false;
+  }
+
+  /**
+   * Find a better way to do this.
+   * Also, consider having a config.json where this can be read and saved
+   */
+  public static List<InputConfigSettings> defaults() {
+    final List<InputConfigSettings> defaults = new ArrayList<>();
+    defaults.add(new InputConfigSettings(PihitanAction.KNOB_LEFT, "2")); // X
+    defaults.add(new InputConfigSettings(PihitanAction.KNOB_RIGHT, "1")); // B
+    defaults.add(new InputConfigSettings(PihitanAction.PRESS, "0")); // A
+    defaults.add(new InputConfigSettings(PihitanAction.PREV_SECTION, "9")); // LT
+    defaults.add(new InputConfigSettings(PihitanAction.NEXT_SECTION, "10")); // RT
+    defaults.add(new InputConfigSettings(PihitanAction.PREV_ITEM, "13")); // DPAD_L
+    defaults.add(new InputConfigSettings(PihitanAction.NEXT_ITEM, "14")); // DPAD_R
+    defaults.add(new InputConfigSettings(PihitanAction.PREV_PRESET, "4")); // SELECT / VIEW
+    defaults.add(new InputConfigSettings(PihitanAction.NEXT_PRESET, "6")); // START / MENU
+
+    return defaults;
   }
 
   @Override
@@ -107,14 +126,10 @@ public class SDLGamepadInputListener implements InputListener {
             if(controller.getButton(i) && System.currentTimeMillis() - lastPressMillis >= DEBOUNCE_DURATION) {
               lastPressMillis = System.currentTimeMillis();
               final int button = i;
-              Platform.runLater(() -> {
-                inputConsumer.accept(new InputCode(String.valueOf(button), true));
-              });
+              Platform.runLater(() -> inputConsumer.accept(new InputCode(String.valueOf(button), true)));
             }
           }
-        } catch (SDL_Error e) {
-          throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (SDL_Error | InterruptedException e) {
           throw new RuntimeException(e);
         }
       }

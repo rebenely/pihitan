@@ -1,31 +1,36 @@
 #MAIN_GRID {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-background-color: #040D12;
-    -fx-border-color: white;
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
+  -fx-background-color: #040D12;
+  -fx-border-color: white;
 }
 
 .lbl {
-    -fx-font-size: 16;
-    -fx-text-fill: #F1F6F9;
-    -fx-font-weight: bold;
+  -fx-font-size: 16;
+  -fx-text-fill: #F1F6F9;
+  -fx-font-weight: bold;
 }
 
 .note {
-    -fx-font-size: 12;
-    -fx-font-style: italic;
-    -fx-text-fill: #F1F6F9;
+  -fx-font-size: 12;
+  -fx-font-style: italic;
+  -fx-text-fill: #F1F6F9;
 }
 
 .input-item {
-    -fx-font-weight: bold;
+  -fx-font-weight: bold;
 }
 
 .toggle-button {
-    -fx-background-color: white;
+  -fx-background-color: white;
 }
 
 .toggle-button.listening {
-    -fx-background-color: #1B1A55;
-    -fx-text-fill: #F1F6F9;
+  -fx-background-color: #1B1A55;
+  -fx-text-fill: #F1F6F9;
+}
+
+.step-error {
+  -fx-background-color: red;
+  -fx-text-fill: #F1F6F9;
 }

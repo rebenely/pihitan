@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -34,7 +36,7 @@ public class OverlayController {
     FlowPane root = new FlowPane();
     root.setPadding(new Insets(10, 10, 10, 10));
     Scene scene = new Scene(root);
-    Label label = new Label("Running");
+    Label label = new Label("Press esc to exit");
 
     label.setStyle("-fx-text-fill: #F1F6F9");
     label.setFont(new Font(24));
@@ -53,14 +55,17 @@ public class OverlayController {
     stage.setAlwaysOnTop(true);
 
     InputListener listener = config.getInput();
-    listener.listenToSceneAction(scene, actionCode -> {
-      label.setText(navigator.navigate(actionCode, scene));
-    });
+    listener.listenToSceneAction(scene, actionCode -> label.setText(navigator.navigate(actionCode, scene)));
 
-    stage.setOnCloseRequest(event -> {
-      config.getInput().stopListener();
-    });
+    stage.setOnCloseRequest(event -> listener.stopListener());
 
+    // press esc to close
+    scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if(KeyCode.ESCAPE == keyEvent.getCode()) {
+        listener.stopListener();
+        stage.close();
+      }
+    });
     stage.show();
   }
 }

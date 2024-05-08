@@ -21,6 +21,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for input config screen
+ * TODO save and load config to a file
+ */
 public class InputConfigController implements ConfigController {
   @FXML
   public GridPane mainBody;
@@ -58,7 +62,7 @@ public class InputConfigController implements ConfigController {
 
   @FXML
   public void initialize() {
-    System.out.println("Run init");
+    System.out.println("Config screen");
     buttons = Map.of(
             PihitanAction.KNOB_LEFT, turnLeftKey,
             PihitanAction.KNOB_RIGHT, turnRightKey,
@@ -79,10 +83,10 @@ public class InputConfigController implements ConfigController {
         return;
       }
 
+      // special case for backspace
       final boolean isBackspace = inputCode.isSpecialKey() && KeyboardInputListener.BACKSPACE.equals(inputCode.code());
       selectedBtn.getStyleClass().remove("listening");
       selectedBtn.setText(isBackspace ? "" : inputCode.code());
-
       if(isBackspace) {
         return;
       }
@@ -126,13 +130,19 @@ public class InputConfigController implements ConfigController {
 
     InputListener input = config.getInput();
     input.setKeys(newActions);
-    input.stopListener();
     exit(event);
   }
 
 
   public void exit(ActionEvent event) {
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+    // stop listener
+    InputListener input = config.getInput();
+    if(input != null) {
+      input.stopListener();
+    }
+
     stage.setScene(parent);
   }
 

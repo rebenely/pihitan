@@ -31,9 +31,6 @@ public class NavigatorPos {
   /**
    * Creates the actual screen positions based on the external app bounds
    *
-   * @param pos
-   * @param externalAppBounds
-   * @return
    */
   public static NavigatorPos fromItem(ItemPosition pos, Rectangle2D externalAppBounds) {
     return new NavigatorPos(

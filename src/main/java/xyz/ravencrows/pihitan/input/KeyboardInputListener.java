@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -19,8 +20,27 @@ public class KeyboardInputListener implements InputListener {
 
   private final List<InputConfigSettings> actions;
 
-  public KeyboardInputListener(List<InputConfigSettings> actions) {
-    this.actions = actions;
+  public KeyboardInputListener() {
+    this.actions = defaults();
+  }
+
+  /**
+   * Find a better way to do this.
+   * Also, consider having a config.json where this can be read and saved
+   */
+  public static List<InputConfigSettings> defaults() {
+    final List<InputConfigSettings> defaults = new ArrayList<>();
+    defaults.add(new InputConfigSettings(PihitanAction.PREV_SECTION, "7"));
+    defaults.add(new InputConfigSettings(PihitanAction.NEXT_SECTION, "9"));
+    defaults.add(new InputConfigSettings(PihitanAction.KNOB_LEFT, "4"));
+    defaults.add(new InputConfigSettings(PihitanAction.KNOB_RIGHT, "6"));
+    defaults.add(new InputConfigSettings(PihitanAction.PRESS, "5"));
+    defaults.add(new InputConfigSettings(PihitanAction.PREV_ITEM, "1"));
+    defaults.add(new InputConfigSettings(PihitanAction.NEXT_ITEM, "3"));
+    defaults.add(new InputConfigSettings(PihitanAction.PREV_PRESET, "J"));
+    defaults.add(new InputConfigSettings(PihitanAction.NEXT_PRESET, "K"));
+
+    return defaults;
   }
 
   @Override
@@ -36,9 +56,8 @@ public class KeyboardInputListener implements InputListener {
 
   @Override
   public void listenToRoot(Parent root, Consumer<InputCode> inputConsumer) {
-    root.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-      inputConsumer.accept(getInputCode(keyEvent));
-    });
+    root.addEventFilter(KeyEvent.KEY_PRESSED,
+            keyEvent -> inputConsumer.accept(getInputCode(keyEvent)));
   }
 
   @Override
@@ -70,7 +89,6 @@ public class KeyboardInputListener implements InputListener {
    * Create input code
    */
   private InputCode getInputCode(KeyEvent keyEvent) {
-    System.out.println("Yeah");
     final KeyCode code = keyEvent.getCode();
     final boolean isBackspace = code == KeyCode.BACK_SPACE;
     final boolean isAlphanumeric = code.isLetterKey() || code.isDigitKey();

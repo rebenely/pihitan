@@ -39,7 +39,7 @@
     <Label styleClass="lbl" text="3." GridPane.columnIndex="0" />
     <Label styleClass="lbl" text="Determine screen size" GridPane.columnIndex="1" />
     <Label styleClass="note" text="This window must be on the same monitor as your VST" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Button onAction="#determineWindowSize" styleClass="btn, btn-lg" text="Point" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Button fx:id="winSizeBtn" onAction="#determineWindowSize" styleClass="btn, btn-lg" text="Point" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <columnConstraints>
          <ColumnConstraints />
          <ColumnConstraints />

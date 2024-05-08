@@ -10,6 +10,7 @@ import xyz.ravencrows.pihitan.templates.ItemPosition;
 import xyz.ravencrows.pihitan.templates.ItemType;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.templates.TemplateItem;
+import xyz.ravencrows.pihitan.util.GsonUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,7 +42,7 @@ public class ScreenNavigator {
     init(template);
     this.sectionsSize = sections.size();
 
-    Gson gson = new Gson();
+    Gson gson = GsonUtil.getInstance();
     System.out.println(gson.toJson(sections));
   }
 

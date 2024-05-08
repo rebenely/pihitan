@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -21,11 +22,13 @@ import javafx.stage.StageStyle;
 import javafx.util.Pair;
 import uk.co.electronstudio.sdl2gdx.SDL2Controller;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
+import xyz.ravencrows.pihitan.input.InputListener;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.SDLGamepadInputListener;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
+import xyz.ravencrows.pihitan.util.GsonUtil;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.io.BufferedReader;
@@ -33,8 +36,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+/**
+ * Main controller for the app
+ * Also includes the stage for determining screen sizes and the navigation program
+ */
 public class MainController {
   private Pair<Double, Double> upperLeft;
   private Pair<Double, Double> lowerRight;
@@ -47,6 +56,10 @@ public class MainController {
   protected Button templateSelectBtn;
   @FXML
   protected ChoiceBox<String> inputTypeSelect;
+  @FXML
+  public Button winSizeBtn;
+
+  private Map<String, InputListener> initializedInputs;
 
   @FXML
   public void initialize() {
@@ -59,11 +72,27 @@ public class MainController {
 
     inputTypeSelect.getItems().removeAll(inputTypeSelect.getItems());
     inputTypeSelect.getItems().addAll(inputOptions);
+
+    // set keyboard as default
+    final InputListener kbListener = new KeyboardInputListener();
+    config.setInput(kbListener);
     inputTypeSelect.getSelectionModel().select(KeyboardInputListener.NAME);
+
+    initializedInputs = new HashMap<>();
+    initializedInputs.put(KeyboardInputListener.NAME, kbListener);
   }
 
+  /**
+   * Start the navigation program
+   */
   @FXML
   protected void startOverlay() {
+    if(!validate()) {
+      return; // do not start
+    }
+
+    initInputSelect();
+
     final OverlayController controller = new OverlayController(config);
     controller.start();
 
@@ -72,22 +101,34 @@ public class MainController {
     currentStage.hide();
   }
 
+  /**
+   * Validate before starting
+   */
+  private boolean validate() {
+    boolean noErrors = true;
+    if(config.getDspBounds() == null) {
+      winSizeBtn.getStyleClass().add("step-error");
+      noErrors = false;
+    } else {
+      winSizeBtn.getStyleClass().remove("step-error");
+    }
+
+    if(config.getTemplate() == null) {
+      templateSelectBtn.getStyleClass().add("step-error");
+      noErrors = false;
+    } else {
+      templateSelectBtn.getStyleClass().remove("step-error");
+    }
+
+    return noErrors;
+  }
+
+  /**
+   * Show the input config screen
+   */
   @FXML
   protected void configureInputType() throws IOException {
-    // setup selected config first so upon load of InputConfigController, config is properly updated
-    final String selected = inputTypeSelect.getValue();
-    if (KeyboardInputListener.NAME.equals(selected)) {
-      config.setInput(new KeyboardInputListener(new ArrayList<>()));
-    } else {
-      SDL2ControllerManager manager = config.getManager();
-      for(Controller controller : manager.getControllers()){
-        if(!selected.equals(controller.getName())) {
-          continue;
-        }
-        config.setInput(new SDLGamepadInputListener(new ArrayList<>(), (SDL2Controller)controller, manager)); // initialize actions
-        System.out.println("found");
-      }
-    }
+    initInputSelect();
 
     // Get the current stage
     FXMLLoader loader = new FXMLLoader(getClass().getResource("input-config.fxml"));
@@ -101,11 +142,48 @@ public class MainController {
     currentStage.setScene(scene);
   }
 
+  /**
+   * setup selected config first so upon load of InputConfigController, config is properly updated
+   * Config is set to Keyboard by default in initialize method
+   */
+  private void initInputSelect() {
+    final String selected = inputTypeSelect.getValue();
+    if(selected.equals(KeyboardInputListener.NAME)) {
+      // KB is always initialized
+      config.setInput(initializedInputs.get(selected));
+      return;
+    }
+
+    InputListener inputListener = initializedInputs.get(selected);
+    if(inputListener != null) {
+      config.setInput(inputListener);
+      return;
+    }
+
+    // if not yet defined, create input listener
+    SDL2ControllerManager manager = config.getManager();
+    for(Controller controller : manager.getControllers()){
+      final String name = controller.getName();
+      if(!selected.equals(name)) {
+        continue;
+      }
+      InputListener newInput = new SDLGamepadInputListener((SDL2Controller) controller, manager);
+      initializedInputs.put(name, newInput);
+      config.setInput(newInput);
+    }
+  }
+
   @FXML
   protected void exit(ActionEvent event) {
+    if(config.getInput() != null) {
+      config.getInput().stopListener();
+    }
     ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
   }
 
+  /**
+   * Show the overlay for the user screen size input
+   */
   @FXML
   protected void determineWindowSize() {
     Stage stage = new Stage();
@@ -117,7 +195,7 @@ public class MainController {
     label.setFont(new Font(24));
 
     root.setAlignment(Pos.CENTER);
-    root.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5)");
+    root.setStyle("-fx-background-color: rgba(0, 0, 0, 0.9)");
     root.getChildren().add(label);
 
     scene.setFill(Color.TRANSPARENT);
@@ -134,7 +212,7 @@ public class MainController {
     scene.setOnMouseClicked(mouseEvent -> {
       if (this.step == 0) {
         upperLeft = new Pair<>(mouseEvent.getX(), mouseEvent.getY());
-        label.setText("Click on the lower right corner of your archetype window");
+        label.setText("Click on the lower right corner of your vst window");
       } else if (this.step == 1) {
         lowerRight = new Pair<>(mouseEvent.getX(), mouseEvent.getY());
 
@@ -142,7 +220,10 @@ public class MainController {
         final double height = lowerRight.getValue() - upperLeft.getValue();
         final boolean invalidDimension = width <= 0 || height <= 0;
 
-        label.setText(invalidDimension ? "Invalid points, please resetup" : "Click anywhere to continue");
+        // validate first
+        label.setText(invalidDimension
+                ? "Invalid points, please re-setup"
+                : "Click anywhere to continue");
         if (!invalidDimension) {
           config.setDspBounds(new Rectangle2D(upperLeft.getKey(), upperLeft.getValue(), width, height));
         }
@@ -169,8 +250,8 @@ public class MainController {
       System.out.println("No file selected");
       return;
     }
-    Gson gson = new Gson();
 
+    Gson gson = GsonUtil.getInstance();
     try(final BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
       Template template = gson.fromJson(br, Template.class);
       templateSelectBtn.setText(template.getName());
