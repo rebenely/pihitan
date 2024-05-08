@@ -1,5 +1,6 @@
 package xyz.ravencrows.pihitan;
 
+import com.badlogic.gdx.controllers.Controller;
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,21 +12,18 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.robot.Robot;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
+import xyz.ravencrows.pihitan.input.SDLGamepadInputListener;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
-import xyz.ravencrows.pihitan.userconfig.InputType;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
@@ -33,6 +31,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainController {
   private Pair<Double, Double> upperLeft;
@@ -49,9 +49,17 @@ public class MainController {
 
   @FXML
   public void initialize() {
+    // get plugged in controllers
+    SDL2ControllerManager manager = new SDL2ControllerManager();
+    List<String> inputOptions = new ArrayList<>();
+    inputOptions.add(KeyboardInputListener.NAME);
+    for(Controller controller : manager.getControllers()){
+      inputOptions.add(controller.getName());
+    }
+
     inputTypeSelect.getItems().removeAll(inputTypeSelect.getItems());
-    inputTypeSelect.getItems().addAll("Keyboard", "Pihitan Pedal");
-    inputTypeSelect.getSelectionModel().select("Keyboard");
+    inputTypeSelect.getItems().addAll(inputOptions);
+    inputTypeSelect.getSelectionModel().select(KeyboardInputListener.NAME);
   }
 
   @FXML
@@ -67,16 +75,29 @@ public class MainController {
 
   @FXML
   protected void configureInputType() throws IOException {
-    final InputType selectedType = InputType.of(inputTypeSelect.getSelectionModel().getSelectedItem());
-    FXMLLoader loader = new FXMLLoader(getClass().getResource(selectedType.getFxml()));
+    // setup selected config first so upon load of InputConfigController, config is properly updated
+    final String selected = inputTypeSelect.getValue();
+    if (KeyboardInputListener.NAME.equals(selected)) {
+      config.setInput(new KeyboardInputListener(new ArrayList<>()));
+    } else {
+      SDL2ControllerManager manager = new SDL2ControllerManager();
+      for(Controller controller : manager.getControllers()){
+        if(!selected.equals(controller.getName())) {
+          continue;
+        }
+        config.setInput(new SDLGamepadInputListener(new ArrayList<>(), controller)); // initialize actions
+        System.out.println("found");
+      }
+    }
+
+    // Get the current stage
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("input-config.fxml"));
     Scene scene = ScreenUtil.setupTranparentScreen(loader);
 
     // Pass parent scene so we can go back
     ConfigController configController = loader.getController();
     configController.initController(inputTypeSelect.getScene());
 
-
-    // Get the current stage
     Stage currentStage = (Stage) inputTypeSelect.getScene().getWindow();
     currentStage.setScene(scene);
   }

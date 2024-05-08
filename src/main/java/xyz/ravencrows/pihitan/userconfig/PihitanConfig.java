@@ -2,6 +2,7 @@ package xyz.ravencrows.pihitan.userconfig;
 
 import javafx.geometry.Rectangle2D;
 import xyz.ravencrows.pihitan.input.InputListener;
+import xyz.ravencrows.pihitan.input.InputType;
 import xyz.ravencrows.pihitan.templates.Template;
 
 /**

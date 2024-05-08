@@ -15,9 +15,13 @@ import java.util.stream.Collectors;
 public class KeyboardInputListener implements InputListener {
   public static final String BACKSPACE = "BACKSPACE";
   public static final String SPACE = "SPACE";
+
+  public static final String NAME = "Keyboard";
+
   private final List<InputConfigSettings> actions;
-  public KeyboardInputListener() {
-    actions = new ArrayList<>();
+
+  public KeyboardInputListener(List<InputConfigSettings> actions) {
+    this.actions = actions;
   }
 
   @Override
