@@ -6,7 +6,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -38,7 +37,6 @@ public class KeyboardInputListener implements InputListener {
   @Override
   public void listenToRoot(Parent root, Consumer<InputCode> inputConsumer) {
     root.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-      System.out.println("Yeah");
       inputConsumer.accept(getInputCode(keyEvent));
     });
   }
@@ -63,6 +61,14 @@ public class KeyboardInputListener implements InputListener {
     });
   }
 
+  @Override
+  public void stopListener() {
+    // do nothing
+  }
+
+  /**
+   * Create input code
+   */
   private InputCode getInputCode(KeyEvent keyEvent) {
     System.out.println("Yeah");
     final KeyCode code = keyEvent.getCode();

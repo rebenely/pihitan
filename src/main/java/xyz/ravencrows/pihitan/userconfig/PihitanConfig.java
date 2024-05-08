@@ -1,6 +1,7 @@
 package xyz.ravencrows.pihitan.userconfig;
 
 import javafx.geometry.Rectangle2D;
+import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.input.InputListener;
 import xyz.ravencrows.pihitan.input.InputType;
 import xyz.ravencrows.pihitan.templates.Template;
@@ -16,6 +17,8 @@ public class PihitanConfig {
   private InputListener input;
 
   private Template template;
+
+  private SDL2ControllerManager manager;
 
 
   public static PihitanConfig getInstance() {
@@ -52,5 +55,13 @@ public class PihitanConfig {
 
   public void setTemplate(Template template) {
     this.template = template;
+  }
+
+  public SDL2ControllerManager getManager() {
+    return manager;
+  }
+
+  public void setManager(SDL2ControllerManager manager) {
+    this.manager = manager;
   }
 }

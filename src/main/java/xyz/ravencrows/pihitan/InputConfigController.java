@@ -124,7 +124,9 @@ public class InputConfigController implements ConfigController {
       }
     }
 
-    config.getInput().setKeys(newActions);
+    InputListener input = config.getInput();
+    input.setKeys(newActions);
+    input.stopListener();
     exit(event);
   }
 

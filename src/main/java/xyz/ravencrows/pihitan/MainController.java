@@ -19,9 +19,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import uk.co.electronstudio.sdl2gdx.SDL2Controller;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.SDLGamepadInputListener;
+import xyz.ravencrows.pihitan.input.SDLGamepadInputTask;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
@@ -50,10 +52,9 @@ public class MainController {
   @FXML
   public void initialize() {
     // get plugged in controllers
-    SDL2ControllerManager manager = new SDL2ControllerManager();
     List<String> inputOptions = new ArrayList<>();
     inputOptions.add(KeyboardInputListener.NAME);
-    for(Controller controller : manager.getControllers()){
+    for(Controller controller : config.getManager().getControllers()){
       inputOptions.add(controller.getName());
     }
 
@@ -80,12 +81,12 @@ public class MainController {
     if (KeyboardInputListener.NAME.equals(selected)) {
       config.setInput(new KeyboardInputListener(new ArrayList<>()));
     } else {
-      SDL2ControllerManager manager = new SDL2ControllerManager();
+      SDL2ControllerManager manager = config.getManager();
       for(Controller controller : manager.getControllers()){
         if(!selected.equals(controller.getName())) {
           continue;
         }
-        config.setInput(new SDLGamepadInputListener(new ArrayList<>(), controller)); // initialize actions
+        config.setInput(new SDLGamepadInputListener(new ArrayList<>(), (SDL2Controller)controller, manager)); // initialize actions
         System.out.println("found");
       }
     }
