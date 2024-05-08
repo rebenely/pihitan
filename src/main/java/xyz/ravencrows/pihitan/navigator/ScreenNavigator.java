@@ -5,7 +5,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
-import xyz.ravencrows.pihitan.PihitanApp;
 import xyz.ravencrows.pihitan.input.PihitanAction;
 import xyz.ravencrows.pihitan.templates.ItemPosition;
 import xyz.ravencrows.pihitan.templates.ItemType;
@@ -23,10 +22,6 @@ public class ScreenNavigator {
   final private List<NavigatorSection> sections;
   final private int sectionsSize;
   private List<NavigatorItem> items; //reference for sections.items
-
-  // hovered items
-  private NavigatorSection hoverSection;
-  private NavigatorItem hoverItem;
 
   // selected items
   private Integer currSection;
@@ -184,30 +179,33 @@ public class ScreenNavigator {
     robot.mouseWheel(-1);
   }
 
-  public void navigate(PihitanAction pihitanAction, Scene scene) {
+  public String navigate(PihitanAction pihitanAction, Scene scene) {
     System.out.println(pihitanAction);
-    switch (pihitanAction) {
+    final String activeNavItem = currItem != null ? getCurrentItem().getDisplayName() : sections.get(currSection).getDisplayName();
+    return switch (pihitanAction) {
       case KNOB_LEFT:
-      this.turnKnobLeft();
-      break;
+        this.turnKnobLeft();
+        yield activeNavItem;
       case KNOB_RIGHT:
         this.turnKnobRight();
-        break;
+        yield activeNavItem;
       case PREV_SECTION:
-        this.moveToPreviousSection();
-        break;
+        yield this.moveToPreviousSection().getDisplayName();
       case NEXT_SECTION:
-        this.moveToNextSection();
-        break;
+        yield this.moveToNextSection().getDisplayName();
       case PRESS:
         this.press(scene);
-        break;
+        yield activeNavItem;
       case PREV_ITEM:
-        this.moveToPreviousItem();
-        break;
+        yield this.moveToPreviousItem().getDisplayName();
       case NEXT_ITEM:
-        this.moveToNextItem();
-        break;
-    }
+        yield this.moveToNextItem().getDisplayName();
+      case PREV_PRESET:
+        // Add preset prev method
+        yield activeNavItem;
+      case NEXT_PRESET:
+        // Add preset next method
+        yield activeNavItem;
+    };
   }
 }

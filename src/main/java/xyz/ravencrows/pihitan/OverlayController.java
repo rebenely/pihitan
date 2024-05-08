@@ -1,10 +1,11 @@
 package xyz.ravencrows.pihitan;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -30,9 +31,10 @@ public class OverlayController {
     stage.setX(0);
     stage.setY(0);
 
-    HBox root = new HBox();
+    FlowPane root = new FlowPane();
+    root.setPadding(new Insets(10, 10, 10, 10));
     Scene scene = new Scene(root);
-    Label label = new Label("Is it working");
+    Label label = new Label("Running");
 
     label.setStyle("-fx-text-fill: #F1F6F9");
     label.setFont(new Font(24));
@@ -52,7 +54,11 @@ public class OverlayController {
 
     InputListener listener = config.getInput();
     listener.listenToSceneAction(scene, actionCode -> {
-      navigator.navigate(actionCode, scene);
+      label.setText(navigator.navigate(actionCode, scene));
+    });
+
+    stage.setOnCloseRequest(event -> {
+      config.getInput().stopListener();
     });
 
     stage.show();

@@ -19,8 +19,7 @@ public class PihitanApp extends Application {
     config.setManager(new SDL2ControllerManager());
 
     FXMLLoader fxmlLoader = new FXMLLoader(PihitanApp.class.getResource("main.fxml"));
-    ScreenUtil.setupTranparentScreen(stage, fxmlLoader, "Pihitan");
-    stage.setAlwaysOnTop(false);
+    ScreenUtil.setupScreen(stage, fxmlLoader, "Pihitan");
 
     stage.show();
   }

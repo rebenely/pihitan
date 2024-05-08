@@ -1,10 +1,8 @@
 package xyz.ravencrows.pihitan.navigator;
 
-import xyz.ravencrows.pihitan.templates.TemplateSection;
-
 import java.util.List;
 
-public class NavigatorSection {
+public class NavigatorSection implements NavigatorDisplay {
   private String id;
 
   private NavigatorPos pos;
@@ -48,5 +46,10 @@ public class NavigatorSection {
 
   public void setPreStep(NavigatorPos preStep) {
     this.preStep = preStep;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return id;
   }
 }

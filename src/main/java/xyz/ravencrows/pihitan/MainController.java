@@ -23,7 +23,6 @@ import uk.co.electronstudio.sdl2gdx.SDL2Controller;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.SDLGamepadInputListener;
-import xyz.ravencrows.pihitan.input.SDLGamepadInputTask;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
@@ -71,7 +70,6 @@ public class MainController {
     Stage currentStage = (Stage) inputTypeSelect.getScene().getWindow();
     currentStage.setAlwaysOnTop(false);
     currentStage.hide();
-
   }
 
   @FXML
@@ -93,7 +91,7 @@ public class MainController {
 
     // Get the current stage
     FXMLLoader loader = new FXMLLoader(getClass().getResource("input-config.fxml"));
-    Scene scene = ScreenUtil.setupTranparentScreen(loader);
+    Scene scene = ScreenUtil.setupScreen(loader);
 
     // Pass parent scene so we can go back
     ConfigController configController = loader.getController();
@@ -126,7 +124,7 @@ public class MainController {
     scene.setCursor(Cursor.CROSSHAIR);
 
     stage.initStyle(StageStyle.TRANSPARENT);
-    stage.setResizable(false);
+    stage.setResizable(true);
     stage.setTitle("Specify window size");
     stage.setScene(scene);
     stage.setMaximized(true);

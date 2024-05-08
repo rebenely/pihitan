@@ -1,5 +1,8 @@
 package xyz.ravencrows.pihitan.input;
 
+/**
+ * App navigation actions
+ */
 public enum PihitanAction {
   KNOB_LEFT,
   PRESS,

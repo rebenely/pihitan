@@ -3,7 +3,7 @@ package xyz.ravencrows.pihitan.navigator;
 import javafx.geometry.Rectangle2D;
 import xyz.ravencrows.pihitan.templates.TemplateItem;
 
-public class NavigatorItem {
+public class NavigatorItem implements NavigatorDisplay {
   private String id;
   private NavigatorPos pos;
 
@@ -46,5 +46,10 @@ public class NavigatorItem {
 
   public void setParent(String parent) {
     this.parent = parent;
+  }
+
+  @Override
+  public String getDisplayName() {
+    return parent + ":" + id;
   }
 }
