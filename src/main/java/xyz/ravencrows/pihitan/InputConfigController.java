@@ -55,6 +55,10 @@ public class InputConfigController implements ConfigController {
 
   private final PihitanConfig config = PihitanConfig.getInstance();
 
+  // draggable screen
+  private double xOffset;
+  private double yOffset;
+
   @Override
   public void initController(Scene parent) {
     this.parent = parent;
@@ -154,5 +158,20 @@ public class InputConfigController implements ConfigController {
     btn.getStyleClass().add("listening");
     btn.requestFocus();
     selectedBtn = btn;
+  }
+
+  @FXML
+  protected void windowDragged(MouseEvent event) {
+    System.out.println("yeah");
+    Stage stage = (Stage) mainBody.getScene().getWindow();
+    stage.setX(event.getScreenX() - xOffset);
+    stage.setY(event.getScreenY() - yOffset);
+  }
+
+  @FXML
+  protected void windowPressed(MouseEvent event) {
+    System.out.println("right");
+    xOffset = event.getSceneX();
+    yOffset = event.getSceneY();
   }
 }

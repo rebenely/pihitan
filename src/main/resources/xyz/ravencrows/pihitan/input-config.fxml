@@ -4,7 +4,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane id="MAIN_GRID" fx:id="mainBody" alignment="TOP_CENTER" hgap="10" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="309.0" vgap="20" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.ravencrows.pihitan.InputConfigController">
+<GridPane id="MAIN_GRID" fx:id="mainBody" alignment="TOP_CENTER" hgap="10" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="309.0" vgap="20"
+          GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.2-ea"
+          onMouseDragged="#windowDragged" onMousePressed="#windowPressed"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.ravencrows.pihitan.InputConfigController">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>

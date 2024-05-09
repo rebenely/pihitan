@@ -17,7 +17,6 @@ public class PihitanApp extends Application {
 
     FXMLLoader fxmlLoader = new FXMLLoader(PihitanApp.class.getResource("main.fxml"));
     ScreenUtil.setupScreen(stage, fxmlLoader, "Pihitan");
-
     stage.show();
   }
 

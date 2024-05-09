@@ -6,7 +6,7 @@
 
   <groupId>xyz.ravencrows</groupId>
   <artifactId>Pihitan</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.1.0-alpha</version>
   <name>Pihitan</name>
 
   <properties>
@@ -75,6 +75,40 @@
   <build>
     <plugins>
       <plugin>
+        <!-- Build an executable JAR -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>xyz.ravencrows.pihitan.Pihitan</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <transformers>
+                <transformer implementation=
+                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>xyz.ravencrows.pihitan.Pihitan</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
@@ -92,7 +126,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>xyz.ravencrows.pihitan/xyz.ravencrows.pihitan.PihitanApp</mainClass>
+              <mainClass>xyz.ravencrows.pihitan.Pihitan</mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
               <jlinkImageName>app</jlinkImageName>

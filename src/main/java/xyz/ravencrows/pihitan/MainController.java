@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -46,6 +47,10 @@ import java.util.Map;
 public class MainController {
   private Pair<Double, Double> upperLeft;
   private Pair<Double, Double> lowerRight;
+
+  // draggable screen
+  private double xOffset;
+  private double yOffset;
 
   private int step;
 
@@ -258,5 +263,18 @@ public class MainController {
       config.setTemplate(template);
     }
 
+  }
+
+  @FXML
+  protected void windowDragged(MouseEvent event) {
+    Stage stage = (Stage) templateSelectBtn.getScene().getWindow();
+    stage.setX(event.getScreenX() - xOffset);
+    stage.setY(event.getScreenY() - yOffset);
+  }
+
+  @FXML
+  protected void windowPressed(MouseEvent event) {
+    xOffset = event.getSceneX();
+    yOffset = event.getSceneY();
   }
 }

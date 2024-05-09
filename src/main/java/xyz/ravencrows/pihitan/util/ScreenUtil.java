@@ -18,7 +18,7 @@ public class ScreenUtil {
     Scene scene = setupScreen(loader);
 
     stage.setTitle(windowTitle);
-    stage.initStyle(StageStyle.DECORATED);
+    stage.initStyle(StageStyle.TRANSPARENT);
     stage.setScene(scene);
     stage.setResizable(false);
 
