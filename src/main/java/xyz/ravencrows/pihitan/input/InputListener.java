@@ -7,6 +7,9 @@ import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Interface for input types
+ */
 public interface InputListener {
 
   void setKeys(List<InputConfigSettings> actions);
@@ -20,7 +23,7 @@ public interface InputListener {
 
   /**
    * listens to action events in scene
-   * uses scene since overlay doesnt work when using parent only
+   * uses scene since overlay doesn't work when using parent only
    * but scene is not defined yet in fxml initialize
    */
   void listenToSceneAction(Scene scene, Consumer<PihitanAction> actionConsumer);

@@ -2,6 +2,9 @@ package xyz.ravencrows.pihitan.templates;
 
 import java.util.List;
 
+/**
+ * Item in template, can have items in items
+ */
 public class TemplateItem {
   private String id;
   private ItemType type;

@@ -3,7 +3,8 @@ package xyz.ravencrows.pihitan.templates;
 import java.util.List;
 
 /**
- * Base class for template
+ * Base class for sections,
+ * Will probably implement sections in sections in the future
  */
 public class TemplateSection {
   private String id;

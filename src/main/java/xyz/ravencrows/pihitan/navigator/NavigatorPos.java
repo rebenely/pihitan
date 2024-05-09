@@ -1,5 +1,6 @@
 package xyz.ravencrows.pihitan.navigator;
 
+import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import xyz.ravencrows.pihitan.templates.ItemPosition;
 
@@ -37,5 +38,9 @@ public class NavigatorPos {
             externalAppBounds.getWidth() * (pos.getX()*.01) + externalAppBounds.getMinX(),
             externalAppBounds.getHeight() * (pos.getY()*.01) + externalAppBounds.getMinY()
           );
+  }
+
+  public Point2D getPoint() {
+    return new Point2D(getX(), getY());
   }
 }

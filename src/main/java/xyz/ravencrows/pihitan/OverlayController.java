@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
+import javafx.scene.robot.Robot;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -24,7 +25,7 @@ public class OverlayController {
   private final ScreenNavigator navigator;
 
   public OverlayController(PihitanConfig config) {
-    this.navigator = new ScreenNavigator(config.getTemplate(), config.getDspBounds());
+    this.navigator = new ScreenNavigator(config.getTemplate(), config.getDspBounds(), new Robot());
     this.config = config;
   }
 

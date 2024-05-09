@@ -34,7 +34,7 @@ public class KeyboardInputListener implements InputListener {
     defaults.add(new InputConfigSettings(PihitanAction.NEXT_SECTION, "9"));
     defaults.add(new InputConfigSettings(PihitanAction.KNOB_LEFT, "4"));
     defaults.add(new InputConfigSettings(PihitanAction.KNOB_RIGHT, "6"));
-    defaults.add(new InputConfigSettings(PihitanAction.PRESS, "5"));
+    defaults.add(new InputConfigSettings(PihitanAction.PRESS, "SPACE"));
     defaults.add(new InputConfigSettings(PihitanAction.PREV_ITEM, "1"));
     defaults.add(new InputConfigSettings(PihitanAction.NEXT_ITEM, "3"));
     defaults.add(new InputConfigSettings(PihitanAction.PREV_PRESET, "J"));

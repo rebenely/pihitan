@@ -1,6 +1,14 @@
 {
   "id": "plini-x",
   "name": "Plini X",
+  "nextPreset": {
+    "x": 70,
+    "y": 25
+  },
+  "prevPreset": {
+    "x": 50,
+    "y": 25
+  },
   "sections": [
     {
       "id": "global",
