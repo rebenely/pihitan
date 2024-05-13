@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import xyz.ravencrows.pihitan.input.InputListener;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.PihitanAction;
@@ -26,6 +28,8 @@ import java.util.stream.Collectors;
  * TODO save and load config to a file
  */
 public class InputConfigController implements ConfigController {
+  private static final Logger logger = LoggerFactory.getLogger(InputConfigController.class);
+
   @FXML
   public GridPane mainBody;
   @FXML
@@ -66,17 +70,17 @@ public class InputConfigController implements ConfigController {
 
   @FXML
   public void initialize() {
-    System.out.println("Config screen");
-    buttons = Map.of(
-            PihitanAction.KNOB_LEFT, turnLeftKey,
-            PihitanAction.KNOB_RIGHT, turnRightKey,
-            PihitanAction.PRESS, pressKey,
-            PihitanAction.PREV_SECTION, navLeft,
-            PihitanAction.NEXT_SECTION, navRight,
-            PihitanAction.PREV_ITEM, navItemLeft,
-            PihitanAction.NEXT_ITEM, navItemRight,
-            PihitanAction.PREV_PRESET, presetLeft,
-            PihitanAction.NEXT_PRESET, presetRight
+    logger.info("Initializing config screen");
+    buttons =  Map.of(
+      PihitanAction.KNOB_LEFT, turnLeftKey,
+      PihitanAction.KNOB_RIGHT, turnRightKey,
+      PihitanAction.PRESS, pressKey,
+      PihitanAction.PREV_SECTION, navLeft,
+      PihitanAction.NEXT_SECTION, navRight,
+      PihitanAction.PREV_ITEM, navItemLeft,
+      PihitanAction.NEXT_ITEM, navItemRight,
+      PihitanAction.PREV_PRESET, presetLeft,
+      PihitanAction.NEXT_PRESET, presetRight
     );
 
     final InputListener listener = config.getInput();
@@ -123,11 +127,12 @@ public class InputConfigController implements ConfigController {
   public void save(ActionEvent event) {
     List<InputConfigSettings> newActions = new ArrayList<>();
 
+    logger.info("Saving config");
     for (Map.Entry<PihitanAction, Label> entry : buttons.entrySet()) {
       final Label btn = entry.getValue();
       final String btnKey = btn.getText();
       if(btnKey != null) {
-        System.out.println(entry.getKey() + " = " + btnKey);
+        logger.info(entry.getKey() + " = " + btnKey);
         newActions.add(new InputConfigSettings(entry.getKey(), btnKey));
       }
     }
@@ -139,6 +144,7 @@ public class InputConfigController implements ConfigController {
 
 
   public void exit(ActionEvent event) {
+    logger.info("Exiting input config screen");
     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
     // stop listener
@@ -162,7 +168,6 @@ public class InputConfigController implements ConfigController {
 
   @FXML
   protected void windowDragged(MouseEvent event) {
-    System.out.println("yeah");
     Stage stage = (Stage) mainBody.getScene().getWindow();
     stage.setX(event.getScreenX() - xOffset);
     stage.setY(event.getScreenY() - yOffset);
@@ -170,7 +175,6 @@ public class InputConfigController implements ConfigController {
 
   @FXML
   protected void windowPressed(MouseEvent event) {
-    System.out.println("right");
     xOffset = event.getSceneX();
     yOffset = event.getSceneY();
   }

@@ -8,8 +8,12 @@ import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.io.IOException;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class PihitanApp extends Application {
+  private static final Logger logger = LoggerFactory.getLogger(PihitanApp.class);
+
   @Override
   public void start(Stage stage) throws IOException {
     PihitanConfig config = PihitanConfig.getInstance();
@@ -18,8 +22,22 @@ public class PihitanApp extends Application {
     FXMLLoader fxmlLoader = new FXMLLoader(PihitanApp.class.getResource("main.fxml"));
     ScreenUtil.setupScreen(stage, fxmlLoader, "Pihitan");
     stage.show();
+
+    logger.info("App start");
   }
 
+  @Override
+  public void init() throws Exception {
+    // globally catch all exceptions to log it in logback
+    Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+      @Override
+      public void uncaughtException(Thread t, Throwable e) {
+        logger.error(
+                "Exception in thread \"" + t.getName() + "\"", e);
+      }
+    });
+    super.init();
+  }
 
   public static void main(String[] args) {
     launch();

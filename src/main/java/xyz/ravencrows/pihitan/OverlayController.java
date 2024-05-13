@@ -13,6 +13,8 @@ import javafx.scene.robot.Robot;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import xyz.ravencrows.pihitan.input.InputListener;
 import xyz.ravencrows.pihitan.navigator.ScreenNavigator;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
@@ -23,6 +25,7 @@ import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 public class OverlayController {
   private final PihitanConfig config;
   private final ScreenNavigator navigator;
+  private static final Logger logger = LoggerFactory.getLogger(OverlayController.class);
 
   public OverlayController(PihitanConfig config) {
     this.navigator = new ScreenNavigator(config.getTemplate(), config.getDspBounds(), new Robot());
@@ -30,6 +33,7 @@ public class OverlayController {
   }
 
   public void start() {
+    logger.info("Initializing overlay app, config: {}", config);
     Stage stage = new Stage();
     stage.setX(0);
     stage.setY(0);
@@ -63,10 +67,12 @@ public class OverlayController {
     // press esc to close
     scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
       if(KeyCode.ESCAPE == keyEvent.getCode()) {
+        logger.info("Escape pressed, exiting");
         listener.stopListener();
         stage.close();
       }
     });
     stage.show();
+    logger.info("Start overlay app");
   }
 }
