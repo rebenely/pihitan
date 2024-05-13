@@ -29,8 +29,10 @@ import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.SDLGamepadInputListener;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
+import xyz.ravencrows.pihitan.userconfig.PersistedInput;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.GsonUtil;
+import xyz.ravencrows.pihitan.util.PersistUtil;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.io.BufferedReader;
@@ -82,13 +84,37 @@ public class MainController {
     inputTypeSelect.getItems().removeAll(inputTypeSelect.getItems());
     inputTypeSelect.getItems().addAll(inputOptions);
 
-    // set keyboard as default
-    final InputListener kbListener = new KeyboardInputListener();
-    config.setInput(kbListener);
+    // get saved config and set defaults
+    final List<PersistedInput> persistedInputs = PersistUtil.getPersistedInputs();
+
+    // always initialize keyboard, either from saved or from defaults
+    final InputListener kbListener = new KeyboardInputListener(KeyboardInputListener.defaults());
+    config.setInput(KeyboardInputListener.NAME, kbListener);
     inputTypeSelect.getSelectionModel().select(KeyboardInputListener.NAME);
 
     initializedInputs = new HashMap<>();
     initializedInputs.put(KeyboardInputListener.NAME, kbListener);
+
+    // initialize other persisted configs
+    for (final PersistedInput input : persistedInputs) {
+      final String name = input.getName();
+      if(!inputOptions.contains(name)) {
+        logger.warn("Cannot find {}", name);
+        continue;
+      }
+
+      InputListener inputListener = initInputSelect(name);
+      if(inputListener == null) {
+        logger.warn("Was not able to create a listener for {}", name);
+        continue;
+      }
+      inputListener.setKeys(input.getActions()); // set keys from persisted data
+      if(input.isSelect()) {
+        logger.info("Selecting {} as default", name);
+        config.setInput(name, inputListener);
+        inputTypeSelect.getSelectionModel().select(name);
+      }
+    }
 
     logger.info("MainController initialized");
   }
@@ -102,10 +128,15 @@ public class MainController {
       logger.error("Invalid config");
       return; // do not start
     }
-
     logger.info("Config valid, starting overlay");
 
-    initInputSelect();
+    final String selected = inputTypeSelect.getValue();
+    final InputListener listener = initInputSelect(selected);
+    config.setInput(selected, listener);
+
+    logger.info("Saving current input config as default");
+    assert listener != null;
+    PersistUtil.setAsDefaultInput(new PersistedInput(selected, listener.getKeys(), true));
 
     final OverlayController controller = new OverlayController(config);
     controller.start();
@@ -145,7 +176,8 @@ public class MainController {
   @FXML
   protected void configureInputType() throws IOException {
     logger.info("Input configure selected");
-    initInputSelect();
+    final String selected = inputTypeSelect.getValue();
+    config.setInput(selected, initInputSelect(selected));
 
     // Get the current stage
     FXMLLoader loader = new FXMLLoader(getClass().getResource("input-config.fxml"));
@@ -162,21 +194,20 @@ public class MainController {
   /**
    * setup selected config first so upon load of InputConfigController, config is properly updated
    * Config is set to Keyboard by default in initialize method
+   *
+   * @return initialized input
    */
-  private void initInputSelect() {
-    final String selected = inputTypeSelect.getValue();
+  private InputListener initInputSelect(final String selected) {
     if(selected.equals(KeyboardInputListener.NAME)) {
       // KB is always initialized
       logger.info("Keyboard input selected");
-      config.setInput(initializedInputs.get(selected));
-      return;
+      return initializedInputs.get(selected);
     }
 
     InputListener inputListener = initializedInputs.get(selected);
     if(inputListener != null) {
       logger.info("Reuse initialized input listener");
-      config.setInput(inputListener);
-      return;
+      return inputListener;
     }
 
     // if not yet defined, create input listener
@@ -189,8 +220,10 @@ public class MainController {
       logger.info("Created input listener {}", name);
       InputListener newInput = new SDLGamepadInputListener((SDL2Controller) controller, manager);
       initializedInputs.put(name, newInput);
-      config.setInput(newInput);
+      return newInput;
     }
+
+    return null;
   }
 
   @FXML

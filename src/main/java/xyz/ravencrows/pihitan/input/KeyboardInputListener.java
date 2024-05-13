@@ -20,8 +20,8 @@ public class KeyboardInputListener implements InputListener {
 
   private final List<InputConfigSettings> actions;
 
-  public KeyboardInputListener() {
-    this.actions = defaults();
+  public KeyboardInputListener(List<InputConfigSettings> actions) {
+    this.actions = actions;
   }
 
   /**

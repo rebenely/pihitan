@@ -13,9 +13,8 @@ import org.slf4j.LoggerFactory;
 import xyz.ravencrows.pihitan.input.InputListener;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.PihitanAction;
-import xyz.ravencrows.pihitan.userconfig.ConfigController;
-import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
-import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
+import xyz.ravencrows.pihitan.userconfig.*;
+import xyz.ravencrows.pihitan.util.PersistUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 
 /**
  * Controller for input config screen
- * TODO save and load config to a file
  */
 public class InputConfigController implements ConfigController {
   private static final Logger logger = LoggerFactory.getLogger(InputConfigController.class);
@@ -136,6 +134,9 @@ public class InputConfigController implements ConfigController {
         newActions.add(new InputConfigSettings(entry.getKey(), btnKey));
       }
     }
+
+    logger.info("Persisting to file");
+    PersistUtil.addOrUpdateInputConfig(new PersistedInput(config.getInputName(), newActions, false));
 
     InputListener input = config.getInput();
     input.setKeys(newActions);

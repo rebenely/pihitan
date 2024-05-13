@@ -3,7 +3,6 @@ package xyz.ravencrows.pihitan.userconfig;
 import javafx.geometry.Rectangle2D;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.input.InputListener;
-import xyz.ravencrows.pihitan.input.InputType;
 import xyz.ravencrows.pihitan.templates.Template;
 
 /**
@@ -12,7 +11,7 @@ import xyz.ravencrows.pihitan.templates.Template;
 public class PihitanConfig {
   private final static PihitanConfig instance = new PihitanConfig();
   private Rectangle2D dspBounds;
-  private InputType inputType;
+  private String inputName;
 
   private InputListener input;
 
@@ -33,20 +32,13 @@ public class PihitanConfig {
     this.dspBounds = dspBounds;
   }
 
-  public InputType getInputType() {
-    return inputType;
-  }
-
-  public void setInputType(InputType inputType) {
-    this.inputType = inputType;
-  }
-
   public InputListener getInput() {
     return input;
   }
 
-  public void setInput(InputListener input) {
+  public void setInput(String inputName, InputListener input) {
     this.input = input;
+    this.inputName = inputName;
   }
 
   public Template getTemplate() {
@@ -63,5 +55,13 @@ public class PihitanConfig {
 
   public void setManager(SDL2ControllerManager manager) {
     this.manager = manager;
+  }
+
+  public String getInputName() {
+    return inputName;
+  }
+
+  public void setInputName(String inputName) {
+    this.inputName = inputName;
   }
 }
