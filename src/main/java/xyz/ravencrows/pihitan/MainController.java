@@ -108,13 +108,20 @@ public class MainController {
               .map(Path::toString)
               .toList();
       logger.info("Templates loaded {}", templates);
+      if(templates.isEmpty()) {
+        logger.error("No templates found!");
+      }
 
       templateSelect.getItems().removeAll(templateSelect.getItems());
       templateSelect.getItems().addAll(templates);
 
       // set to persisted value or first in list
       String persistedTemplate = PersistUtil.getConfig().getTemplate();
-      templateSelect.getSelectionModel().select(persistedTemplate != null ? persistedTemplate : templates.get(0));
+      String defaultTemplate = !templates.isEmpty() ? templates.get(0) : "";
+      if(persistedTemplate != null && templates.contains(persistedTemplate)) {
+        defaultTemplate = persistedTemplate;
+      }
+      templateSelect.getSelectionModel().select(defaultTemplate);
     } catch (Exception e) {
       logger.error("Error encountered reading templates", e);
       throw new RuntimeException(e);
