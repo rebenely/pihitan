@@ -11,7 +11,7 @@
     </encoder>
   </appender>
 
-  <property name="LOG_FILE" value="LogFile" />
+  <property name="LOG_FILE" value="pihitan" />
   <property name="LOG_DIR" value="./logs" />
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <file>${LOG_DIR}/${LOG_FILE}.log</file>
