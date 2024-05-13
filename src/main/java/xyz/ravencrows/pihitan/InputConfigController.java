@@ -136,7 +136,7 @@ public class InputConfigController implements ConfigController {
     }
 
     logger.info("Persisting to file");
-    PersistUtil.addOrUpdateInputConfig(new PersistedInput(config.getInputName(), newActions, false));
+    PersistUtil.addOrUpdateInputConfig(new PersistedInput(config.getInputName(), newActions));
 
     InputListener input = config.getInput();
     input.setKeys(newActions);

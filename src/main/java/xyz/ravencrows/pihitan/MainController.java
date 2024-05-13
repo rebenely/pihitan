@@ -16,7 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
@@ -29,6 +28,7 @@ import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.SDLGamepadInputListener;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
+import xyz.ravencrows.pihitan.userconfig.PersistedConfig;
 import xyz.ravencrows.pihitan.userconfig.PersistedInput;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
 import xyz.ravencrows.pihitan.util.GsonUtil;
@@ -36,13 +36,16 @@ import xyz.ravencrows.pihitan.util.PersistUtil;
 import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 /**
  * Main controller for the app
@@ -50,6 +53,7 @@ import java.util.Map;
  */
 public class MainController {
   private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+  public static final String TEMPLATES = "templates";
 
   private Pair<Double, Double> upperLeft;
   private Pair<Double, Double> lowerRight;
@@ -63,7 +67,7 @@ public class MainController {
   private final PihitanConfig config = PihitanConfig.getInstance();
 
   @FXML
-  protected Button templateSelectBtn;
+  protected ChoiceBox<String> templateSelect;
   @FXML
   protected ChoiceBox<String> inputTypeSelect;
   @FXML
@@ -74,29 +78,56 @@ public class MainController {
   @FXML
   public void initialize() {
     logger.info("Initializing MainController");
-    // get plugged in controllers
-    List<String> inputOptions = new ArrayList<>();
-    inputOptions.add(KeyboardInputListener.NAME);
-    for(Controller controller : config.getManager().getControllers()){
-      inputOptions.add(controller.getName());
-    }
 
-    inputTypeSelect.getItems().removeAll(inputTypeSelect.getItems());
-    inputTypeSelect.getItems().addAll(inputOptions);
+    initializeAvailableTemplates();
 
-    // get saved config and set defaults
-    final List<PersistedInput> persistedInputs = PersistUtil.getPersistedInputs();
+    List<String> inputOptions = initializeAvailableInputTypes();
 
-    // always initialize keyboard, either from saved or from defaults
+    // always initialize keyboard
     final InputListener kbListener = new KeyboardInputListener(KeyboardInputListener.defaults());
     config.setInput(KeyboardInputListener.NAME, kbListener);
     inputTypeSelect.getSelectionModel().select(KeyboardInputListener.NAME);
 
+    // set Keyboard input as default, may change when loading persisted values
     initializedInputs = new HashMap<>();
     initializedInputs.put(KeyboardInputListener.NAME, kbListener);
 
-    // initialize other persisted configs
-    for (final PersistedInput input : persistedInputs) {
+    initializePersistedInputConfigs(inputOptions);
+
+    logger.info("MainController initialized");
+  }
+
+  /**
+   * Get templates in directory
+   */
+  private void initializeAvailableTemplates() {
+    try (Stream<Path> stream = Files.list(Paths.get(TEMPLATES))) {
+      List<String> templates = stream
+              .filter(file -> !Files.isDirectory(file) && file.toString().endsWith(".json"))
+              .map(Path::getFileName)
+              .map(Path::toString)
+              .toList();
+      logger.info("Templates loaded {}", templates);
+
+      templateSelect.getItems().removeAll(templateSelect.getItems());
+      templateSelect.getItems().addAll(templates);
+
+      // set to persisted value or first in list
+      String persistedTemplate = PersistUtil.getConfig().getTemplate();
+      templateSelect.getSelectionModel().select(persistedTemplate != null ? persistedTemplate : templates.get(0));
+    } catch (Exception e) {
+      logger.error("Error encountered reading templates", e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * Initialized persisted configs from config.json
+   */
+  private void initializePersistedInputConfigs(List<String> inputOptions) {
+    // initialize persisted configs
+    final PersistedConfig persistedConfig = PersistUtil.getConfig();
+    for (final PersistedInput input : persistedConfig.getInputs()) {
       final String name = input.getName();
       if(!inputOptions.contains(name)) {
         logger.warn("Cannot find {}", name);
@@ -108,15 +139,30 @@ public class MainController {
         logger.warn("Was not able to create a listener for {}", name);
         continue;
       }
+
       inputListener.setKeys(input.getActions()); // set keys from persisted data
-      if(input.isSelect()) {
+      if(name.equalsIgnoreCase(persistedConfig.getInput())) {
         logger.info("Selecting {} as default", name);
         config.setInput(name, inputListener);
         inputTypeSelect.getSelectionModel().select(name);
       }
     }
+  }
 
-    logger.info("MainController initialized");
+  /**
+   * Initializes available input types
+   */
+  private List<String> initializeAvailableInputTypes() {
+    // get plugged in controllers
+    List<String> inputOptions = new ArrayList<>();
+    inputOptions.add(KeyboardInputListener.NAME);
+    for(Controller controller : config.getManager().getControllers()){
+      inputOptions.add(controller.getName());
+    }
+
+    inputTypeSelect.getItems().removeAll(inputTypeSelect.getItems());
+    inputTypeSelect.getItems().addAll(inputOptions);
+    return inputOptions;
   }
 
   /**
@@ -124,19 +170,25 @@ public class MainController {
    */
   @FXML
   protected void startOverlay() {
-    if(!validate()) {
+    if(!validateBounds()) {
       logger.error("Invalid config");
       return; // do not start
     }
     logger.info("Config valid, starting overlay");
 
+    // get input
     final String selected = inputTypeSelect.getValue();
     final InputListener listener = initInputSelect(selected);
     config.setInput(selected, listener);
 
-    logger.info("Saving current input config as default");
-    assert listener != null;
-    PersistUtil.setAsDefaultInput(new PersistedInput(selected, listener.getKeys(), true));
+    // get template
+    final String templateSelected = templateSelect.getValue();
+    final Template selectedTemplate = readTemplate(templateSelected);
+    config.setTemplate(selectedTemplate);
+
+    // save selected input type and template
+    logger.info("Saving current config as default");
+    PersistUtil.setDefaults(templateSelected, selected);
 
     final OverlayController controller = new OverlayController(config);
     controller.start();
@@ -146,10 +198,26 @@ public class MainController {
     currentStage.hide();
   }
 
+  private Template readTemplate(String templateSelected) {
+    Gson gson = GsonUtil.getInstance();
+    try(final BufferedReader br = new BufferedReader(new FileReader(TEMPLATES + "/" + templateSelected))) {
+      Template template = gson.fromJson(br, Template.class);
+      logger.info("Loaded {}", template.getName());
+
+      templateSelect.getStyleClass().remove("step-error");
+      // add actual validation here
+      return template;
+    } catch (Exception e) {
+      templateSelect.getStyleClass().add("step-error");
+      logger.error("Error reading template {}", templateSelected, e);
+      throw new RuntimeException(e);
+    }
+  }
+
   /**
    * Validate before starting
    */
-  private boolean validate() {
+  private boolean validateBounds() {
     boolean noErrors = true;
     if(config.getDspBounds() == null) {
       winSizeBtn.getStyleClass().add("step-error");
@@ -157,14 +225,6 @@ public class MainController {
       logger.error("No dsp bounds");
     } else {
       winSizeBtn.getStyleClass().remove("step-error");
-    }
-
-    if(config.getTemplate() == null) {
-      templateSelectBtn.getStyleClass().add("step-error");
-      noErrors = false;
-      logger.error("No template selected");
-    } else {
-      templateSelectBtn.getStyleClass().remove("step-error");
     }
 
     return noErrors;
@@ -296,34 +356,8 @@ public class MainController {
   }
 
   @FXML
-  protected void selectTemplate() throws IOException {
-    final FileChooser fileChooser = new FileChooser();
-    final Stage stage = (Stage) templateSelectBtn.getScene().getWindow();
-    fileChooser.setInitialDirectory(new File("."));
-    fileChooser.getExtensionFilters().addAll(
-      new FileChooser.ExtensionFilter("Pihitan Templates", "*.json")
-    );
-
-    final File selectedFile = fileChooser.showOpenDialog(stage);
-    if(selectedFile == null) {
-      logger.warn("No file selected");
-      return;
-    }
-
-    Gson gson = GsonUtil.getInstance();
-    try(final BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
-      Template template = gson.fromJson(br, Template.class);
-      templateSelectBtn.setText(template.getName());
-
-      logger.info("Loaded {}", template.getName());
-      config.setTemplate(template);
-    }
-
-  }
-
-  @FXML
   protected void windowDragged(MouseEvent event) {
-    Stage stage = (Stage) templateSelectBtn.getScene().getWindow();
+    Stage stage = (Stage) templateSelect.getScene().getWindow();
     stage.setX(event.getScreenX() - xOffset);
     stage.setY(event.getScreenY() - yOffset);
   }

@@ -13,15 +13,26 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Works on current directory
  */
 public class PersistUtil {
+  private static final Map<Integer, PersistedConfig> cache = new ConcurrentHashMap<>();
+
   private static final Logger logger = LoggerFactory.getLogger(InputConfigController.class);
   public static final String CONFIG_JSON = "config.json";
 
+  /**
+   * Cached value
+   */
   public static PersistedConfig getConfig() {
+    return cache.computeIfAbsent(0, key -> loadConfig());
+  }
+
+  private static PersistedConfig loadConfig() {
     logger.info("Loading config.js");
     final Gson gson = GsonUtil.getInstance();
     try(final BufferedReader br = new BufferedReader(new FileReader(CONFIG_JSON))) {
@@ -33,15 +44,6 @@ public class PersistUtil {
       persistConfig(newConfig);
       return newConfig;
     }
-  }
-
-  public static List<PersistedInput> getPersistedInputs() {
-    PersistedConfig config = getConfig();
-    if(config == null) {
-      return new ArrayList<>();
-    }
-
-    return config.getInputs() != null ? config.getInputs() : new ArrayList<>();
   }
 
   public static void addOrUpdateInputConfig(PersistedInput input) {
@@ -61,7 +63,6 @@ public class PersistUtil {
         foundExisting = true;
         logger.info("Updating persisted input");
         persistedInput.setActions(input.getActions());
-        persistedInput.setSelect(input.isSelect());
       }
 
       if(!foundExisting) {
@@ -82,28 +83,15 @@ public class PersistUtil {
     } catch (Exception e) {
       logger.error("Unable to write config", e);
     }
+
+    // clear cache
+    cache.clear();
   }
 
-  public static void setAsDefaultInput(PersistedInput selected) {
+  public static void setDefaults(String templates, String input) {
     PersistedConfig config = getConfig();
-
-    List<PersistedInput> inputs = config.getInputs();
-    if(inputs == null) {
-      logger.info("No inputs, creating new");
-      config.setInputs(new ArrayList<>());
-      config.getInputs().add(selected);
-    } else {
-      for(PersistedInput persistedInput : inputs) {
-        if(!persistedInput.getName().equals(selected.getName())) {
-          persistedInput.setSelect(false);
-          continue;
-        }
-        // assumes that the persisted input should already be in the file at this point
-        logger.info("Updating persisted input");
-        persistedInput.setSelect(true);
-      }
-    }
-
+    config.setInput(input);
+    config.setTemplate(templates);
     persistConfig(config);
   }
 }

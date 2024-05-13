@@ -6,12 +6,9 @@ public class PersistedInput {
   private String name;
   private List<InputConfigSettings> actions;
 
-  private boolean select;
-
-  public PersistedInput(String name, List<InputConfigSettings> actions, boolean select) {
+  public PersistedInput(String name, List<InputConfigSettings> actions) {
     this.name = name;
     this.actions = actions;
-    this.select = select;
   }
 
   public String getName() {
@@ -30,11 +27,4 @@ public class PersistedInput {
     this.actions = actions;
   }
 
-  public boolean isSelect() {
-    return select;
-  }
-
-  public void setSelect(boolean select) {
-    this.select = select;
-  }
 }
