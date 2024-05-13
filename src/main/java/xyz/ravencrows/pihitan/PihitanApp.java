@@ -2,6 +2,7 @@ package xyz.ravencrows.pihitan;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,14 @@ public class PihitanApp extends Application {
   @Override
   public void init() throws Exception {
     // globally catch all exceptions to log it in logback
-    Thread.setDefaultUncaughtExceptionHandler((t, e) -> logger.error(
-            "Exception in thread \"" + t.getName() + "\"", e));
+    Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+      logger.error(
+              "Exception in thread \"" + t.getName() + "\"", e);
+
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.setContentText(e.getLocalizedMessage());
+      alert.show();
+    });
     super.init();
   }
 
