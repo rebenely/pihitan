@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import org.libsdl.SDL_Error;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.electronstudio.sdl2gdx.SDL2Controller;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
@@ -19,6 +21,8 @@ import java.util.stream.Collectors;
  * Uses sdl2gdx
  */
 public class SDLGamepadInputListener implements InputListener {
+  private static final Logger logger = LoggerFactory.getLogger(SDLGamepadInputListener.class);
+
   private final List<InputConfigSettings> actions;
   private Thread inputThread;
   private final SDL2Controller controller;
@@ -67,7 +71,7 @@ public class SDLGamepadInputListener implements InputListener {
   @Override
   public void listenToRoot(Parent parent, Consumer<InputCode> inputConsumer) {
     if(isRunning) {
-      System.out.println("Thread is already running!");
+      logger.warn("Thread is already running! Will skip this call.");
       return;
     }
     this.isRunning = true;
@@ -80,7 +84,7 @@ public class SDLGamepadInputListener implements InputListener {
   @Override
   public void listenToSceneAction(Scene scene, Consumer<PihitanAction> actionConsumer) {
     if(isRunning) {
-      System.out.println("Thread is already running!");
+      logger.warn("Thread is already running! Will skip this call.");
       return;
     }
 

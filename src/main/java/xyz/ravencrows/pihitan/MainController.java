@@ -20,6 +20,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.electronstudio.sdl2gdx.SDL2Controller;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.input.InputListener;
@@ -45,6 +47,8 @@ import java.util.Map;
  * Also includes the stage for determining screen sizes and the navigation program
  */
 public class MainController {
+  private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+
   private Pair<Double, Double> upperLeft;
   private Pair<Double, Double> lowerRight;
 
@@ -67,6 +71,7 @@ public class MainController {
 
   @FXML
   public void initialize() {
+    logger.info("Initializing MainController");
     // get plugged in controllers
     List<String> inputOptions = new ArrayList<>();
     inputOptions.add(KeyboardInputListener.NAME);
@@ -84,6 +89,8 @@ public class MainController {
 
     initializedInputs = new HashMap<>();
     initializedInputs.put(KeyboardInputListener.NAME, kbListener);
+
+    logger.info("MainController initialized");
   }
 
   /**
@@ -92,8 +99,11 @@ public class MainController {
   @FXML
   protected void startOverlay() {
     if(!validate()) {
+      logger.error("Invalid config");
       return; // do not start
     }
+
+    logger.info("Config valid, starting overlay");
 
     initInputSelect();
 
@@ -113,6 +123,7 @@ public class MainController {
     if(config.getDspBounds() == null) {
       winSizeBtn.getStyleClass().add("step-error");
       noErrors = false;
+      logger.error("No dsp bounds");
     } else {
       winSizeBtn.getStyleClass().remove("step-error");
     }
@@ -120,6 +131,7 @@ public class MainController {
     if(config.getTemplate() == null) {
       templateSelectBtn.getStyleClass().add("step-error");
       noErrors = false;
+      logger.error("No template selected");
     } else {
       templateSelectBtn.getStyleClass().remove("step-error");
     }
@@ -132,6 +144,7 @@ public class MainController {
    */
   @FXML
   protected void configureInputType() throws IOException {
+    logger.info("Input configure selected");
     initInputSelect();
 
     // Get the current stage
@@ -154,12 +167,14 @@ public class MainController {
     final String selected = inputTypeSelect.getValue();
     if(selected.equals(KeyboardInputListener.NAME)) {
       // KB is always initialized
+      logger.info("Keyboard input selected");
       config.setInput(initializedInputs.get(selected));
       return;
     }
 
     InputListener inputListener = initializedInputs.get(selected);
     if(inputListener != null) {
+      logger.info("Reuse initialized input listener");
       config.setInput(inputListener);
       return;
     }
@@ -171,6 +186,7 @@ public class MainController {
       if(!selected.equals(name)) {
         continue;
       }
+      logger.info("Created input listener {}", name);
       InputListener newInput = new SDLGamepadInputListener((SDL2Controller) controller, manager);
       initializedInputs.put(name, newInput);
       config.setInput(newInput);
@@ -179,6 +195,7 @@ public class MainController {
 
   @FXML
   protected void exit(ActionEvent event) {
+    logger.info("Exit MainController scene");
     if(config.getInput() != null) {
       config.getInput().stopListener();
     }
@@ -190,6 +207,7 @@ public class MainController {
    */
   @FXML
   protected void determineWindowSize() {
+    logger.info("Determine app dimensions");
     Stage stage = new Stage();
     HBox root = new HBox();
     Scene scene = new Scene(root);
@@ -229,9 +247,13 @@ public class MainController {
                 ? "Invalid points, please re-setup"
                 : "Click anywhere to continue");
         if (!invalidDimension) {
+          logger.info("Valid points, saving");
           config.setDspBounds(new Rectangle2D(upperLeft.getKey(), upperLeft.getValue(), width, height));
+        } else {
+          logger.error("Invalid points upperLeft: {}, lowerRight: {}", upperLeft, lowerRight);
         }
       } else {
+        logger.info("Exiting window size screen");
         stage.close();
       }
       this.step++;
@@ -251,7 +273,7 @@ public class MainController {
 
     final File selectedFile = fileChooser.showOpenDialog(stage);
     if(selectedFile == null) {
-      System.out.println("No file selected");
+      logger.warn("No file selected");
       return;
     }
 
@@ -260,6 +282,7 @@ public class MainController {
       Template template = gson.fromJson(br, Template.class);
       templateSelectBtn.setText(template.getName());
 
+      logger.info("Loaded {}", template.getName());
       config.setTemplate(template);
     }
 

@@ -5,6 +5,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import xyz.ravencrows.pihitan.PihitanApp;
 import xyz.ravencrows.pihitan.input.PihitanAction;
 import xyz.ravencrows.pihitan.templates.ItemPosition;
 import xyz.ravencrows.pihitan.templates.ItemType;
@@ -19,6 +22,8 @@ import java.util.List;
  * Class responsible for moving the mouse on screen
  */
 public class ScreenNavigator {
+  private static final Logger logger = LoggerFactory.getLogger(ScreenNavigator.class);
+
   final private List<NavigatorSection> sections;
   final private int sectionsSize;
   final private NavigatorPos prevPreset;
@@ -110,7 +115,7 @@ public class ScreenNavigator {
    * Main public navigation method, called in the listeners
    */
   public String navigate(PihitanAction pihitanAction, Scene scene) {
-    System.out.println(pihitanAction);
+    logger.info("Received action {}", pihitanAction);
     final String activeNavItem = currItem != null
             ? getCurrentItem().getDisplayName()
             : sections.get(currSection).getDisplayName();
