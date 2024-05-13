@@ -194,8 +194,17 @@ public class ScreenNavigator {
         robot.mouseMove(preStep.getX(), preStep.getY());
         robot.mousePress(MouseButton.PRIMARY);
 
+        // request focus so listener events will still work after
+        scene.getWindow().requestFocus();
+
         // move mouse back
         robot.mouseMove(section.getPos().getX(), section.getPos().getY());
+        try {
+          // delay for a bit so the program can properly correctly
+          Thread.sleep(20);
+        } catch (InterruptedException e) {
+          throw new RuntimeException(e);
+        }
       }
 
       // press mouse on the current loc
