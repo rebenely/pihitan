@@ -7,7 +7,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.ravencrows.pihitan.PihitanApp;
 import xyz.ravencrows.pihitan.input.PihitanAction;
 import xyz.ravencrows.pihitan.templates.ItemPosition;
 import xyz.ravencrows.pihitan.templates.ItemType;
