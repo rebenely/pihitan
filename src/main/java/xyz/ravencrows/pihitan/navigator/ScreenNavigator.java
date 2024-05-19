@@ -1,10 +1,12 @@
 package xyz.ravencrows.pihitan.navigator;
 
+import javafx.animation.PauseTransition;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
+import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.ravencrows.pihitan.input.PihitanAction;
@@ -67,9 +69,9 @@ public class ScreenNavigator {
       final NavigatorPos currPos = NavigatorPos.fromItem(section.getPos(), externalAppBounds);
       final NavigatorSection sec = new NavigatorSection(section.getId(), currPos);
 
-      final ItemPosition preStep = section.getPreStep();
-      if (preStep != null) {
-        sec.setPreStep(NavigatorPos.fromItem(section.getPreStep(), externalAppBounds));
+      final ItemPosition postStep = section.getPostStep();
+      if (postStep != null) {
+        sec.setPostStep(NavigatorPos.fromItem(section.getPostStep(), externalAppBounds));
       }
 
       // get items and flatten
@@ -188,31 +190,21 @@ public class ScreenNavigator {
     // this means user is currently navigating through sections
     if(currItem == null) {
       final NavigatorSection section = sections.get(currSection);
-      final NavigatorPos preStep = sections.get(currSection).getPreStep();
-      if (preStep != null) {
-        robot.mouseMove(preStep.getX(), preStep.getY());
-        robot.mousePress(MouseButton.PRIMARY);
-
-        // request focus so listener events will still work after
-        scene.getWindow().requestFocus();
-
-        // move mouse back
-        robot.mouseMove(section.getPos().getX(), section.getPos().getY());
-        try {
-          // delay for a bit so the program can properly correctly
-          Thread.sleep(20);
-        } catch (InterruptedException e) {
-          throw new RuntimeException(e);
-        }
-      }
+      final NavigatorPos postStep = sections.get(currSection).getPostStep();
 
       // press mouse on the current loc
       robot.mousePress(MouseButton.PRIMARY);
-      // update section
-      selectedSection = currSection;
 
       // request focus so listener events will still work after
       scene.getWindow().requestFocus();
+
+      // update section
+      selectedSection = currSection;
+
+      if (postStep != null) {
+        PauseTransition pause = doPostStep(scene, postStep, section);
+        pause.play();
+      }
       return;
     }
 
@@ -228,6 +220,24 @@ public class ScreenNavigator {
 
     // request focus so listener events will still work after
     scene.getWindow().requestFocus();
+  }
+
+  private PauseTransition doPostStep(Scene scene, NavigatorPos preStep, NavigatorSection section) {
+    PauseTransition pause = new PauseTransition(Duration.millis(10));
+    pause.setOnFinished(event -> {
+      robot.mouseMove(preStep.getX(), preStep.getY());
+      // delay for a bit so the program can be clicked
+      // might be due to the distance it travels
+      // pressing effects doesn't require this
+      robot.mousePress(MouseButton.PRIMARY);
+
+      // request focus so listener events will still work after
+      scene.getWindow().requestFocus();
+
+      // move mouse back
+      robot.mouseMove(section.getPos().getX(), section.getPos().getY());
+    });
+    return pause;
   }
 
   private NavigatorItem getCurrentItem() {

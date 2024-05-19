@@ -32,4 +32,12 @@ public class ScreenUtil {
 
     return scene;
   }
+
+  public static void sleep(long ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
@@ -311,13 +312,14 @@ public class MainController {
     Stage stage = new Stage();
     HBox root = new HBox();
     Scene scene = new Scene(root);
-    Label label = new Label("Click on the upper left corner of your archetype window");
+    Label label = new Label("Click on the upper left corner of your target window");
 
-    label.setStyle("-fx-text-fill: #F1F6F9");
+    label.setPadding(new Insets(10));
+    label.setStyle("-fx-text-fill: #F1F6F9; -fx-background-color: rgba(0, 0, 0, 0.8)");
     label.setFont(new Font(24));
 
     root.setAlignment(Pos.CENTER);
-    root.setStyle("-fx-background-color: rgba(0, 0, 0, 0.9)");
+    root.setStyle("-fx-background-color: rgba(0, 0, 0, 0.3)");
     root.getChildren().add(label);
 
     scene.setFill(Color.TRANSPARENT);
@@ -334,7 +336,7 @@ public class MainController {
     scene.setOnMouseClicked(mouseEvent -> {
       if (this.step == 0) {
         upperLeft = new Pair<>(mouseEvent.getX(), mouseEvent.getY());
-        label.setText("Click on the lower right corner of your vst window");
+        label.setText("Click on the lower right corner of your target window");
       } else if (this.step == 1) {
         lowerRight = new Pair<>(mouseEvent.getX(), mouseEvent.getY());
 

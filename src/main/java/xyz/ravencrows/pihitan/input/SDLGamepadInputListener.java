@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import uk.co.electronstudio.sdl2gdx.SDL2Controller;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.userconfig.InputConfigSettings;
+import xyz.ravencrows.pihitan.util.ScreenUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,7 +124,7 @@ public class SDLGamepadInputListener implements InputListener {
       while(isRunning) {
         try {
           manager.pollState();
-          Thread.sleep(50);
+          ScreenUtil.sleep(50);
           // no analog stick for now :(
           for(int i = 0; i < 20; i++) {
             // debounce for a bit
@@ -133,7 +134,8 @@ public class SDLGamepadInputListener implements InputListener {
               Platform.runLater(() -> inputConsumer.accept(new InputCode(String.valueOf(button), true)));
             }
           }
-        } catch (SDL_Error | InterruptedException e) {
+        } catch (SDL_Error e) {
+          logger.error("Error in gamepad listener", e);
           throw new RuntimeException(e);
         }
       }
