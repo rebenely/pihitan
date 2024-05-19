@@ -11,7 +11,7 @@ public class TemplateSection {
   private ItemPosition pos;
   private List<TemplateItem> items;
 
-  private ItemPosition preStep;
+  private ItemPosition postStep;
 
   public String getId() {
     return id;
@@ -37,11 +37,11 @@ public class TemplateSection {
     this.items = items;
   }
 
-  public ItemPosition getPreStep() {
-    return preStep;
+  public ItemPosition getPostStep() {
+    return postStep;
   }
 
-  public void setPreStep(ItemPosition preStep) {
-    this.preStep = preStep;
+  public void setPostStep(ItemPosition postStep) {
+    this.postStep = postStep;
   }
 }

@@ -7,7 +7,7 @@ public class NavigatorSection implements NavigatorDisplay {
 
   private NavigatorPos pos;
 
-  private NavigatorPos preStep;
+  private NavigatorPos postStep;
 
   private List<NavigatorItem> items;
 
@@ -40,12 +40,12 @@ public class NavigatorSection implements NavigatorDisplay {
     this.items = items;
   }
 
-  public NavigatorPos getPreStep() {
-    return preStep;
+  public NavigatorPos getPostStep() {
+    return postStep;
   }
 
-  public void setPreStep(NavigatorPos preStep) {
-    this.preStep = preStep;
+  public void setPostStep(NavigatorPos postStep) {
+    this.postStep = postStep;
   }
 
   @Override
