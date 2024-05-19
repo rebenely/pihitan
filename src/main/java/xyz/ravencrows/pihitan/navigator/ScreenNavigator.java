@@ -266,4 +266,8 @@ public class ScreenNavigator {
     // request focus so listener events will still work after
     scene.getWindow().requestFocus();
   }
+
+  public Robot getRobot() {
+    return robot;
+  }
 }

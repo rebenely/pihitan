@@ -163,44 +163,18 @@
               }
             },
             {
-              "id": "level",
-              "type": "KNOB",
-              "pos": {
-                "x": 68,
-                "y": 41
-              }
-            },
-            {
-              "id": "tone",
-              "type": "KNOB",
-              "pos": {
-                "x": 62,
-                "y": 52
-              }
-            }
-          ]
-        },
-        {
-          "id": "drive",
-          "type": "GEAR",
-          "pos": {
-            "x": 62,
-            "y": 70
-          },
-          "items": [
-            {
-              "id": "drive",
-              "type": "KNOB",
-              "pos": {
-                "x": 55,
-                "y": 41
-              }
-            },
-            {
               "id": "od/fuzz",
               "type": "TOGGLE",
               "pos": {
                 "x": 62,
+                "y": 41
+              }
+            },
+            {
+              "id": "level",
+              "type": "KNOB",
+              "pos": {
+                "x": 68,
                 "y": 41
               }
             },
@@ -234,7 +208,7 @@
               "id": "note/ms",
               "type": "TOGGLE",
               "pos": {
-                "x": 91,
+                "x": 85,
                 "y": 47
               }
             },
