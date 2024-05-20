@@ -102,7 +102,8 @@ public class MainController {
    * Get templates in directory
    */
   private void initializeAvailableTemplates() {
-    try (Stream<Path> stream = Files.list(Paths.get(TEMPLATES))) {
+    // create if it doesn't exist
+    try (Stream<Path> stream = Files.list(Files.createDirectories(Paths.get(TEMPLATES)))) {
       List<String> templates = stream
               .filter(file -> !Files.isDirectory(file) && file.toString().endsWith(".json"))
               .map(Path::getFileName)
