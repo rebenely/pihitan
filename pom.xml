@@ -6,12 +6,13 @@
 
   <groupId>xyz.ravencrows</groupId>
   <artifactId>Pihitan</artifactId>
-  <version>0.1.0-alpha</version>
+  <version>0.2.1-alpha</version>
   <name>Pihitan</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.10.0</junit.version>
+    <maven.compiler.release>17</maven.compiler.release>
   </properties>
 
   <repositories>
