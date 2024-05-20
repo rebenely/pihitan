@@ -1,5 +1,7 @@
 package xyz.ravencrows.pihitan.templates;
 
+import javafx.scene.paint.Color;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,8 @@ public class Template {
   private List<TemplateSection> sections;
   private ItemPosition prevPreset;
   private ItemPosition nextPreset;
+
+  private Color highlightColor;
 
   public String getId() {
     return id;
@@ -50,5 +54,13 @@ public class Template {
 
   public void setNextPreset(ItemPosition nextPreset) {
     this.nextPreset = nextPreset;
+  }
+
+  public Color getHighlightColor() {
+    return highlightColor;
+  }
+
+  public void setHighlightColor(Color highlightColor) {
+    this.highlightColor = highlightColor;
   }
 }
