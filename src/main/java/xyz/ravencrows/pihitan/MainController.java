@@ -211,7 +211,7 @@ public class MainController {
     Gson gson = GsonUtil.getInstance();
     try(final BufferedReader br = new BufferedReader(new FileReader(TEMPLATES + "/" + templateSelected))) {
       Template template = gson.fromJson(br, Template.class);
-      logger.info("Loaded {}", template.getName());
+      logger.info("Loaded {}", template.getId());
 
       templateSelect.getStyleClass().remove("step-error");
       // add actual validation here

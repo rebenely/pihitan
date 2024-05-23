@@ -223,7 +223,12 @@ public class ScreenNavigator {
   }
 
   private PauseTransition doPostStep(Scene scene, NavigatorPos preStep, NavigatorSection section) {
-    PauseTransition pause = new PauseTransition(Duration.millis(10));
+    PauseTransition pause = new PauseTransition(Duration.millis(100));
+    PauseTransition moveBack = new PauseTransition(Duration.millis(100));
+    moveBack.setOnFinished(event -> {
+      // move mouse back
+      robot.mouseMove(section.getPos().getX(), section.getPos().getY());
+    });
     pause.setOnFinished(event -> {
       robot.mouseMove(preStep.getX(), preStep.getY());
       // delay for a bit so the program can be clicked
@@ -234,8 +239,7 @@ public class ScreenNavigator {
       // request focus so listener events will still work after
       scene.getWindow().requestFocus();
 
-      // move mouse back
-      robot.mouseMove(section.getPos().getX(), section.getPos().getY());
+      moveBack.play();
     });
     return pause;
   }
