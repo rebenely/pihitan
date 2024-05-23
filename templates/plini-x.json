@@ -1,6 +1,5 @@
 {
   "id": "plini-x",
-  "name": "Plini X",
   "nextPreset": {
     "x": 48,
     "y": 15
@@ -29,8 +28,8 @@
           "id": "gate-toggle",
           "type": "GEAR",
           "pos": {
-            "x": 21,
-            "y": 16
+            "x": 17,
+            "y": 14
           },
           "items": [
             {
@@ -56,7 +55,7 @@
           "type": "GEAR",
           "pos": {
             "x": 81,
-            "y": 17
+            "y": 16
           },
           "items": [
             {
@@ -287,7 +286,7 @@
           "id": "treble",
           "type": "KNOB",
           "pos": {
-            "x": 39,
+            "x": 45,
             "y": 74
           }
         },
@@ -476,6 +475,254 @@
             "x": 70,
             "y": 70
           }
+        }
+      ]
+    },
+    {
+      "id": "cab",
+      "pos": {
+        "x": 50,
+        "y": 10
+      },
+      "items": [
+        {
+          "id": "L:on/off",
+          "type": "GEAR",
+          "pos": {
+            "x": 17,
+            "y": 37
+          },
+          "items": [
+            {
+              "id": "L:prev-mic",
+              "type": "TOGGLE",
+              "pos": {
+                "x": 4,
+                "y": 33
+              }
+            },
+            {
+              "id": "L:next-mic",
+              "type": "TOGGLE",
+              "pos": {
+                "x": 7,
+                "y": 33
+              }
+            },
+            {
+              "id": "L:pos",
+              "type": "KNOB",
+              "pos": {
+                "x": 7,
+                "y": 47
+              }
+            },
+            {
+              "id": "L:distance",
+              "type": "KNOB",
+              "pos": {
+                "x": 15,
+                "y": 47
+              }
+            },
+            {
+              "id": "L:mic-level",
+              "type": "KNOB",
+              "pos": {
+                "x": 7,
+                "y": 61
+              }
+            },
+            {
+              "id": "L:pan",
+              "type": "KNOB",
+              "pos": {
+                "x": 15,
+                "y": 61
+              }
+            },
+            {
+              "id": "L:phase",
+              "type": "TOGGLE",
+              "pos": {
+                "x": 10,
+                "y": 78
+              }
+            }
+          ]
+        },
+        {
+          "id": "R:on/off",
+          "type": "GEAR",
+          "pos": {
+            "x": 95,
+            "y": 37
+          },
+          "items": [
+            {
+              "id": "R:prev-mic",
+              "type": "TOGGLE",
+              "pos": {
+                "x": 82,
+                "y": 33
+              }
+            },
+            {
+              "id": "R:next-mic",
+              "type": "TOGGLE",
+              "pos": {
+                "x": 85,
+                "y": 33
+              }
+            },
+            {
+              "id": "R:pos",
+              "type": "KNOB",
+              "pos": {
+                "x": 85,
+                "y": 47
+              }
+            },
+            {
+              "id": "R:distance",
+              "type": "KNOB",
+              "pos": {
+                "x": 93,
+                "y": 47
+              }
+            },
+            {
+              "id": "R:mic-level",
+              "type": "KNOB",
+              "pos": {
+                "x": 85,
+                "y": 61
+              }
+            },
+            {
+              "id": "R:pan",
+              "type": "KNOB",
+              "pos": {
+                "x": 93,
+                "y": 61
+              }
+            },
+            {
+              "id": "R:phase",
+              "type": "TOGGLE",
+              "pos": {
+                "x": 88,
+                "y": 78
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EQ",
+      "pos": {
+        "x": 55,
+        "y": 10
+      },
+      "items": [
+        {
+          "id": "EQ",
+          "type": "GEAR",
+          "pos": {
+            "x": 80,
+            "y": 65
+          },
+          "items": [
+            {
+              "id": "HPF",
+              "type": "KNOB",
+              "pos": {
+                "x": 19,
+                "y": 53
+              }
+            },
+            {
+              "id": "65Hz",
+              "type": "KNOB",
+              "pos": {
+                "x": 27,
+                "y": 53
+              }
+            },
+            {
+              "id": "125Hz",
+              "type": "KNOB",
+              "pos": {
+                "x": 33,
+                "y": 53
+              }
+            },
+            {
+              "id": "250Hz",
+              "type": "KNOB",
+              "pos": {
+                "x": 38,
+                "y": 53
+              }
+            },
+            {
+              "id": "500Hz",
+              "type": "KNOB",
+              "pos": {
+                "x": 44,
+                "y": 53
+              }
+            },
+            {
+              "id": "1kHz",
+              "type": "KNOB",
+              "pos": {
+                "x": 50,
+                "y": 53
+              }
+            },
+            {
+              "id": "2kHz",
+              "type": "KNOB",
+              "pos": {
+                "x": 56,
+                "y": 53
+              }
+            },
+            {
+              "id": "4kHz",
+              "type": "KNOB",
+              "pos": {
+                "x": 61,
+                "y": 53
+              }
+            },
+            {
+              "id": "8kHz",
+              "type": "KNOB",
+              "pos": {
+                "x": 67,
+                "y": 53
+              }
+            },
+            {
+              "id": "16kHz",
+              "type": "KNOB",
+              "pos": {
+                "x": 73,
+                "y": 53
+              }
+            },
+            {
+              "id": "LPF",
+              "type": "KNOB",
+              "pos": {
+                "x": 80,
+                "y": 53
+              }
+            }
+          ]
         }
       ]
     },

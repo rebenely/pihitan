@@ -9,7 +9,6 @@ import java.util.List;
  */
 public class Template {
   private String id;
-  private String name;
   private List<TemplateSection> sections;
   private ItemPosition prevPreset;
   private ItemPosition nextPreset;
@@ -22,14 +21,6 @@ public class Template {
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public List<TemplateSection> getSections() {

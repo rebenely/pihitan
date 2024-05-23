@@ -53,7 +53,7 @@ public class OverlayController {
 
     label.setStyle("""
             -fx-text-fill: #F1F6F9;
-            -fx-background-color: rgba(0, 0, 0, 0.3);
+            -fx-background-color: rgba(0, 0, 0, 0.7);
             -fx-padding: 20px;
             """);
     label.setFont(new Font(24));
