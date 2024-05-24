@@ -11,18 +11,16 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class ScreenUtil {
-  public static final int WIDTH = 480;
-  public static final int HEIGHT = 540;
+  public static final int WIDTH = 380;
+  public static final int HEIGHT = 500;
 
-  public static Scene setupScreen(Stage stage, FXMLLoader loader, String windowTitle) throws IOException {
+  public static void setupScreen(Stage stage, FXMLLoader loader, String windowTitle) throws IOException {
     Scene scene = setupScreen(loader);
 
     stage.setTitle(windowTitle);
     stage.initStyle(StageStyle.TRANSPARENT);
     stage.setScene(scene);
     stage.setResizable(false);
-
-    return scene;
   }
 
   public static Scene setupScreen(FXMLLoader loader) throws IOException {
