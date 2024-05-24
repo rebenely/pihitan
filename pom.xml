@@ -6,7 +6,7 @@
 
   <groupId>xyz.ravencrows</groupId>
   <artifactId>Pihitan</artifactId>
-  <version>0.2.1-alpha</version>
+  <version>0.3.0-alpha</version>
   <name>Pihitan</name>
 
   <properties>
