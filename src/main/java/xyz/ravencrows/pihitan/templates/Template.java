@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class Template {
   private String id;
+  private String windowName;
   private List<TemplateSection> sections;
   private ItemPosition prevPreset;
   private ItemPosition nextPreset;
@@ -53,5 +54,13 @@ public class Template {
 
   public void setHighlightColor(Color highlightColor) {
     this.highlightColor = highlightColor;
+  }
+
+  public String getWindowName() {
+    return windowName;
+  }
+
+  public void setWindowName(String windowName) {
+    this.windowName = windowName;
   }
 }

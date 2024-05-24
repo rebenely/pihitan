@@ -7,7 +7,7 @@
           onMouseDragged="#windowDragged" onMousePressed="#windowPressed"
           xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.ravencrows.pihitan.MainController">
   <padding>
-    <Insets bottom="20.0" left="40.0" right="40.0" top="20.0" />
+    <Insets bottom="20.0" left="40.0" right="40.0" top="40.0" />
   </padding>
 
   <GridPane hgap="10" styleClass="h1" vgap="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
@@ -37,11 +37,7 @@
          <RowConstraints />
       </rowConstraints>
   </GridPane>
-  <GridPane hgap="10" styleClass="h1" vgap="10" GridPane.columnIndex="0" GridPane.rowIndex="4">
-    <Label styleClass="lbl" text="3." GridPane.columnIndex="0" />
-    <Label styleClass="lbl" text="Determine screen size" GridPane.columnIndex="1" />
-    <Label styleClass="note" text="This window must be on the same monitor as your VST" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Button fx:id="winSizeBtn" onAction="#determineWindowSize" styleClass="btn, btn-lg" text="Point" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+   <GridPane hgap="10" styleClass="h1" vgap="10" GridPane.rowIndex="4">
       <columnConstraints>
          <ColumnConstraints />
          <ColumnConstraints />
@@ -50,22 +46,12 @@
          <RowConstraints />
          <RowConstraints />
       </rowConstraints>
-  </GridPane>
-   <GridPane hgap="10" layoutX="50.0" layoutY="136.0" styleClass="h1" vgap="10" GridPane.rowIndex="6">
-      <columnConstraints>
-         <ColumnConstraints />
-         <ColumnConstraints />
-      </columnConstraints>
-      <rowConstraints>
-         <RowConstraints />
-         <RowConstraints />
-      </rowConstraints>
-       <Label styleClass="lbl" text="4." GridPane.columnIndex="0" GridPane.rowIndex="0" />
+       <Label styleClass="lbl" text="3." GridPane.columnIndex="0" GridPane.rowIndex="0" />
        <Label styleClass="lbl" text="Select input type" GridPane.columnIndex="1" GridPane.rowIndex="0" />
        <ChoiceBox fx:id="inputTypeSelect" styleClass="input-item" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
        <Button GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#configureInputType" styleClass="btn" text="Configure" />
    </GridPane>
-   <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="7">
+   <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="9">
      <buttons>
        <Button onAction="#startOverlay" styleClass="btn, toggle-button" text="Start" />
        <Button onAction="#exit" styleClass="btn, toggle-button" text="Exit" />
