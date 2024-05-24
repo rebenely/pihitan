@@ -5,6 +5,7 @@ target/
 logs/
 config.json
 Pihitan
+.idea
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
