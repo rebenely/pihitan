@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class ScreenNavigator {
   private static final Logger logger = LoggerFactory.getLogger(ScreenNavigator.class);
+  public static final Duration POST_STEP_DELAY = Duration.millis(100);
 
   final private List<NavigatorSection> sections;
   final private int sectionsSize;
@@ -222,15 +223,15 @@ public class ScreenNavigator {
     scene.getWindow().requestFocus();
   }
 
-  private PauseTransition doPostStep(Scene scene, NavigatorPos preStep, NavigatorSection section) {
-    PauseTransition pause = new PauseTransition(Duration.millis(100));
-    PauseTransition moveBack = new PauseTransition(Duration.millis(100));
+  private PauseTransition doPostStep(Scene scene, NavigatorPos postStep, NavigatorSection section) {
+    PauseTransition pause = new PauseTransition(POST_STEP_DELAY);
+    PauseTransition press = new PauseTransition(POST_STEP_DELAY);
+    PauseTransition moveBack = new PauseTransition(POST_STEP_DELAY);
     moveBack.setOnFinished(event -> {
       // move mouse back
       robot.mouseMove(section.getPos().getX(), section.getPos().getY());
     });
-    pause.setOnFinished(event -> {
-      robot.mouseMove(preStep.getX(), preStep.getY());
+    press.setOnFinished(event -> {
       // delay for a bit so the program can be clicked
       // might be due to the distance it travels
       // pressing effects doesn't require this
@@ -240,6 +241,10 @@ public class ScreenNavigator {
       scene.getWindow().requestFocus();
 
       moveBack.play();
+    });
+    pause.setOnFinished(event -> {
+      robot.mouseMove(postStep.getX(), postStep.getY());
+      press.play();
     });
     return pause;
   }
