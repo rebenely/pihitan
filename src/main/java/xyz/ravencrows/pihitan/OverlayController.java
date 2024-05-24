@@ -11,6 +11,8 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -37,6 +39,10 @@ public class OverlayController {
   private final ScreenNavigator navigator;
   private static final Logger logger = LoggerFactory.getLogger(OverlayController.class);
 
+  final KeyCombination SHOW_DEBUG_KEY = new KeyCodeCombination(KeyCode.TAB, KeyCombination.SHIFT_DOWN);
+
+  private boolean showDebug;
+
   public OverlayController(PihitanConfig config) {
     this.navigator = new ScreenNavigator(config.getTemplate(), config.getDspBounds(), new Robot());
     this.config = config;
@@ -53,13 +59,13 @@ public class OverlayController {
     Scene scene = new Scene(root);
     Label label = new Label("Press esc to exit");
 
-    if (config.isDebugMode()) {
-      Rectangle2D points = config.getDspBounds();
-      Rectangle wireframe = new Rectangle(points.getMinX(), points.getMinY(), points.getWidth(), points.getHeight());
-      wireframe.setFill(null);
-      wireframe.setStroke(new Color(0, 1, 0, 1));
-      root.getChildren().add(wireframe);
-    }
+    Rectangle2D points = config.getDspBounds();
+    Rectangle wireframe = new Rectangle(points.getMinX(), points.getMinY(), points.getWidth(), points.getHeight());
+    wireframe.setFill(null);
+    wireframe.setStroke(getTemplateColor(config.getTemplate()));
+    root.getChildren().add(wireframe);
+    showDebug = config.isDebugMode();
+    wireframe.setVisible(showDebug);
 
     label.setStyle("""
             -fx-text-fill: #F1F6F9;
@@ -120,6 +126,10 @@ public class OverlayController {
         logger.info("Escape pressed, exiting");
         listener.stopListener();
         stage.close();
+      } else if (SHOW_DEBUG_KEY.match(keyEvent)) {
+        // Shift + Tab will show/hide the wireframe
+        showDebug = !showDebug;
+        wireframe.setVisible(showDebug);
       }
     });
     stage.show();
@@ -137,9 +147,7 @@ public class OverlayController {
     highlight.getChildren().add(arc);
 
     // arc stroke, defaults to white
-    Color highlightColor = template.getHighlightColor() != null ?
-            template.getHighlightColor() :
-            new Color(1, 1, 1, 0.5);
+    Color highlightColor = getTemplateColor(template);
     arc.setStroke(highlightColor);
 
     // rotating arc fx
@@ -150,5 +158,11 @@ public class OverlayController {
     animation.setCycleCount(Animation.INDEFINITE);
     animation.play();
     return arc;
+  }
+
+  private static Color getTemplateColor(Template template) {
+    return template.getColor() != null ?
+            template.getColor() :
+            new Color(1, 1, 1, 0.5);
   }
 }

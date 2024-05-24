@@ -1,6 +1,7 @@
 {
   "id": "plini-x",
   "windowName": "Archetype Plini X",
+  "color": [ 0, 0.5, 0.7, 1],
   "nextPreset": {
     "x": 48,
     "y": 15

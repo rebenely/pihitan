@@ -13,8 +13,7 @@ public class Template {
   private List<TemplateSection> sections;
   private ItemPosition prevPreset;
   private ItemPosition nextPreset;
-
-  private Color highlightColor;
+  private Color color;
 
   public String getId() {
     return id;
@@ -48,12 +47,12 @@ public class Template {
     this.nextPreset = nextPreset;
   }
 
-  public Color getHighlightColor() {
-    return highlightColor;
+  public Color getColor() {
+    return color;
   }
 
-  public void setHighlightColor(Color highlightColor) {
-    this.highlightColor = highlightColor;
+  public void setColor(Color color) {
+    this.color = color;
   }
 
   public String getWindowName() {
