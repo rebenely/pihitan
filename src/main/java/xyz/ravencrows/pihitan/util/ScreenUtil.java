@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class ScreenUtil {
   public static final int WIDTH = 380;
-  public static final int HEIGHT = 500;
+  public static final int HEIGHT = 520;
 
   public static void setupScreen(Stage stage, FXMLLoader loader, String windowTitle) throws IOException {
     Scene scene = setupScreen(loader);

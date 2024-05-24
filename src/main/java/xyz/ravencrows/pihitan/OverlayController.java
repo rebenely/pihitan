@@ -35,6 +35,7 @@ import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
  * Overlay program
  */
 public class OverlayController {
+  public static final int CIRCLE_RADIUS = 50;
   private final PihitanConfig config;
   private final ScreenNavigator navigator;
   private static final Logger logger = LoggerFactory.getLogger(OverlayController.class);
@@ -113,9 +114,9 @@ public class OverlayController {
       // highlight mouse
       Point2D point = navigator.getRobot().getMousePosition();
       highlight.relocate(point.getX(), point.getY());
-      mouseHighlight.setRadius(40);
-      arc.setRadiusX(40);
-      arc.setRadiusY(40);
+      mouseHighlight.setRadius(CIRCLE_RADIUS);
+      arc.setRadiusX(CIRCLE_RADIUS);
+      arc.setRadiusY(CIRCLE_RADIUS);
     });
 
     stage.setOnCloseRequest(event -> listener.stopListener());
