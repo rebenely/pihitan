@@ -4,7 +4,6 @@ target/
 !**/src/test/**/target/
 logs/
 config.json
-Pihitan
 .idea
 
 ### IntelliJ IDEA ###
