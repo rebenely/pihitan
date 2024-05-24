@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane id="MAIN_GRID" alignment="TOP_CENTER" hgap="10" vgap="20" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"
-          onMouseDragged="#windowDragged" onMousePressed="#windowPressed"
-          xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.ravencrows.pihitan.MainController">
+
+<GridPane id="MAIN_GRID" alignment="TOP_CENTER" hgap="10" onMouseDragged="#windowDragged" onMousePressed="#windowPressed" vgap="20" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.ravencrows.pihitan.MainController">
   <padding>
     <Insets bottom="20.0" left="40.0" right="40.0" top="40.0" />
   </padding>
@@ -13,7 +12,7 @@
   <GridPane hgap="10" styleClass="h1" vgap="10" GridPane.columnIndex="0" GridPane.rowIndex="2">
     <Label styleClass="lbl" text="1." GridPane.columnIndex="0" />
     <Label styleClass="lbl" text="Open your NeuralDSP Archetype" GridPane.columnIndex="1" />
-    <Label styleClass="note" text="Put it on the first page (effects)" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <Label styleClass="note" text="Keep it visible on the screen" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <columnConstraints>
          <ColumnConstraints />
          <ColumnConstraints />
@@ -26,7 +25,7 @@
   <GridPane hgap="10" styleClass="h1" vgap="10" GridPane.columnIndex="0" GridPane.rowIndex="3">
     <Label styleClass="lbl" text="2." GridPane.columnIndex="0" GridPane.rowIndex="0" />
     <Label styleClass="lbl" text="Select template" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-    <ChoiceBox fx:id="templateSelect" maxWidth="1000" styleClass="input-item" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+    <ChoiceBox fx:id="templateSelect" maxWidth="1000" prefHeight="26.0" prefWidth="36.0" styleClass="input-item" GridPane.columnIndex="1" GridPane.columnSpan="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
     </ChoiceBox>
       <columnConstraints>
          <ColumnConstraints />
@@ -41,6 +40,7 @@
       <columnConstraints>
          <ColumnConstraints />
          <ColumnConstraints />
+         <ColumnConstraints />
       </columnConstraints>
       <rowConstraints>
          <RowConstraints />
@@ -48,8 +48,8 @@
       </rowConstraints>
        <Label styleClass="lbl" text="3." GridPane.columnIndex="0" GridPane.rowIndex="0" />
        <Label styleClass="lbl" text="Select input type" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-       <ChoiceBox fx:id="inputTypeSelect" styleClass="input-item" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-       <Button GridPane.columnIndex="2" GridPane.rowIndex="1" onAction="#configureInputType" styleClass="btn" text="Configure" />
+       <ChoiceBox fx:id="inputTypeSelect" prefWidth="150.0" styleClass="input-item" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+       <Button onAction="#configureInputType" styleClass="btn" text="Configure" GridPane.columnIndex="2" GridPane.rowIndex="1" />
    </GridPane>
    <ButtonBar prefHeight="40.0" prefWidth="200.0" GridPane.rowIndex="9">
      <buttons>
@@ -61,6 +61,8 @@
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
       <RowConstraints />
       <RowConstraints />
       <RowConstraints />
