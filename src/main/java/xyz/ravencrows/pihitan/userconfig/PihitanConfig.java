@@ -19,6 +19,8 @@ public class PihitanConfig {
 
   private SDL2ControllerManager manager;
 
+  private boolean debugMode;
+
 
   public static PihitanConfig getInstance() {
     return instance;
@@ -63,5 +65,13 @@ public class PihitanConfig {
 
   public void setInputName(String inputName) {
     this.inputName = inputName;
+  }
+
+  public boolean isDebugMode() {
+    return debugMode;
+  }
+
+  public void setDebugMode(boolean debugMode) {
+    this.debugMode = debugMode;
   }
 }

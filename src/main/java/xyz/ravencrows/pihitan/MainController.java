@@ -182,7 +182,7 @@ public class MainController {
     final boolean hasWindowName = windowName != null && !windowName.isBlank();
     if (hasWindowName) {
       try {
-        Rectangle2D rect2d = JnaScreenIdentifier.getInstance().determineScreenSize(selectedTemplate.getWindowName());
+        Rectangle2D rect2d = new JnaScreenIdentifier().determineScreenSize(selectedTemplate.getWindowName());
         config.setDspBounds(rect2d);
       } catch (Exception e) {
         logger.error("Error while finding window, please manually determine points", e);
@@ -194,7 +194,7 @@ public class MainController {
     }
 
     if(!validateBounds()) {
-      logger.error("Invalid config");
+      logger.error("Invalid bounds");
       return; // do not start
     }
 

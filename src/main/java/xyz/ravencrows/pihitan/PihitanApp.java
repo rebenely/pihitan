@@ -42,6 +42,14 @@ public class PihitanApp extends Application {
   }
 
   public static void main(String[] args) {
+    PihitanConfig config = PihitanConfig.getInstance();
+
+    for (String arg : args) {
+      if(arg.equalsIgnoreCase("--debug")) {
+        config.setDebugMode(true);
+      }
+    }
+
     launch();
   }
 }

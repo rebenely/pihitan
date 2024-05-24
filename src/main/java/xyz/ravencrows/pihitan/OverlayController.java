@@ -3,6 +3,7 @@ package xyz.ravencrows.pihitan;
 import javafx.animation.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.robot.Robot;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -50,6 +52,14 @@ public class OverlayController {
     root.setPadding(new Insets(10));
     Scene scene = new Scene(root);
     Label label = new Label("Press esc to exit");
+
+    if (config.isDebugMode()) {
+      Rectangle2D points = config.getDspBounds();
+      Rectangle wireframe = new Rectangle(points.getMinX(), points.getMinY(), points.getWidth(), points.getHeight());
+      wireframe.setFill(null);
+      wireframe.setStroke(new Color(0, 1, 0, 1));
+      root.getChildren().add(wireframe);
+    }
 
     label.setStyle("""
             -fx-text-fill: #F1F6F9;
