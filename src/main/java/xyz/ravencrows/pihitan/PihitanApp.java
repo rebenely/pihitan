@@ -24,9 +24,6 @@ public class PihitanApp extends Application {
     ScreenUtil.setupScreen(stage, fxmlLoader, "Pihitan");
     stage.show();
 
-    boolean debugMode = Boolean.parseBoolean(getParameters().getNamed().get("debug"));
-    config.setDebugMode(debugMode);
-
     logger.info("App start");
   }
 
@@ -45,6 +42,14 @@ public class PihitanApp extends Application {
   }
 
   public static void main(String[] args) {
+    PihitanConfig config = PihitanConfig.getInstance();
+
+    for (String arg : args) {
+      if(arg.equalsIgnoreCase("--debug")) {
+        config.setDebugMode(true);
+      }
+    }
+
     launch();
   }
 }
