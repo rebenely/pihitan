@@ -114,6 +114,7 @@ public class SDLGamepadInputListener implements InputListener {
   @Override
   public void stopListener() {
     isRunning = false;
+    manager.close();
   }
 
   /**

@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -18,8 +17,7 @@ import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 import xyz.ravencrows.pihitan.input.InputListener;
 import xyz.ravencrows.pihitan.input.KeyboardInputListener;
 import xyz.ravencrows.pihitan.input.SDLGamepadInputListener;
-import xyz.ravencrows.pihitan.navigator.JnaScreenIdentifier;
-import xyz.ravencrows.pihitan.navigator.ManualScreenIdentifier;
+import xyz.ravencrows.pihitan.navigator.ScreenIdentifierService;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.ConfigController;
 import xyz.ravencrows.pihitan.userconfig.PersistedConfig;
@@ -179,19 +177,7 @@ public class MainController {
 
     // determine screen size
     final String windowName = selectedTemplate.getWindowName();
-    final boolean hasWindowName = windowName != null && !windowName.isBlank();
-    if (hasWindowName) {
-      try {
-        Rectangle2D rect2d = new JnaScreenIdentifier().determineScreenSize(selectedTemplate.getWindowName());
-        config.setDspBounds(rect2d);
-      } catch (Exception e) {
-        logger.error("Error while finding window, please manually determine points", e);
-        determineWindowSize();
-      }
-    } else {
-      // manually determine window size, add prompt here
-      determineWindowSize();
-    }
+    config.setDspBounds(ScreenIdentifierService.getInstance().getScreenSize(windowName));
 
     if(!validateBounds()) {
       logger.error("Invalid bounds");
@@ -302,14 +288,6 @@ public class MainController {
       config.getInput().stopListener();
     }
     ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
-  }
-
-  /**
-   * Show the overlay for the user screen size input
-   */
-  protected void determineWindowSize() {
-    logger.info("Unable to detect app, please manually determine dimensions");
-    config.setDspBounds(new ManualScreenIdentifier().determineScreenSize(""));
   }
 
   @FXML

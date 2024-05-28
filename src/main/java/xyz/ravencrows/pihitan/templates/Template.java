@@ -14,6 +14,7 @@ public class Template {
   private ItemPosition prevPreset;
   private ItemPosition nextPreset;
   private Color color;
+  private String author;
 
   public String getId() {
     return id;
@@ -61,5 +62,13 @@ public class Template {
 
   public void setWindowName(String windowName) {
     this.windowName = windowName;
+  }
+
+  public String getAuthor() {
+    return author;
+  }
+
+  public void setAuthor(String author) {
+    this.author = author;
   }
 }
