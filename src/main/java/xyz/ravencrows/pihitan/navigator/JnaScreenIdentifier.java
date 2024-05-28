@@ -9,6 +9,18 @@ import xyz.ravencrows.pihitan.util.PihitanUser32;
  * Use JNA to detect window size automatically
  */
 public class JnaScreenIdentifier implements StdCallLibrary, ScreenPointsIdentifier {
+  private static JnaScreenIdentifier INSTANCE;
+
+  private JnaScreenIdentifier() {
+  }
+
+  public static JnaScreenIdentifier getInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new JnaScreenIdentifier();
+    }
+
+    return INSTANCE;
+  }
 
   public static final double DEFAULT_SCALING_FACTOR = 96.0;
 

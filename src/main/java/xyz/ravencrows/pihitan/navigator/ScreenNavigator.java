@@ -18,6 +18,7 @@ import xyz.ravencrows.pihitan.templates.TemplateItem;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Class responsible for moving the mouse on screen
@@ -111,6 +112,17 @@ public class ScreenNavigator {
     });
 
     return flattenedItems;
+  }
+
+  public void recomputeAppBounds(Rectangle2D newAppBounds) {
+    sections.forEach(section -> {
+      section.getPos().recompute(newAppBounds);
+      Optional.ofNullable(section.getPostStep()).ifPresent(postStep -> postStep.recompute(newAppBounds));
+      section.getItems().forEach(item -> {
+        item.getPressPos().recompute(newAppBounds);
+        item.getPos().recompute(newAppBounds);
+      });
+    });
   }
 
   /**

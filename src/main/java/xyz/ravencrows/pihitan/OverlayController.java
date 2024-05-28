@@ -27,6 +27,7 @@ import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.ravencrows.pihitan.input.InputListener;
+import xyz.ravencrows.pihitan.navigator.ScreenIdentifierService;
 import xyz.ravencrows.pihitan.navigator.ScreenNavigator;
 import xyz.ravencrows.pihitan.templates.Template;
 import xyz.ravencrows.pihitan.userconfig.PihitanConfig;
@@ -40,9 +41,15 @@ public class OverlayController {
   private final ScreenNavigator navigator;
   private static final Logger logger = LoggerFactory.getLogger(OverlayController.class);
 
-  final KeyCombination SHOW_DEBUG_KEY = new KeyCodeCombination(KeyCode.TAB, KeyCombination.SHIFT_DOWN);
+  // Currently only used in showing wireframe
+  final KeyCombination SHOW_DEBUG_KEY = new KeyCodeCombination(KeyCode.DIGIT2, KeyCombination.SHIFT_DOWN);
+
+  // reconfigure screen bounds
+  final KeyCombination RECONFIGURE_SCREEN = new KeyCodeCombination(KeyCode.DIGIT1, KeyCombination.SHIFT_DOWN);
 
   private boolean showDebug;
+
+  private boolean escPressed;
 
   public OverlayController(PihitanConfig config) {
     this.navigator = new ScreenNavigator(config.getTemplate(), config.getDspBounds(), new Robot());
@@ -55,10 +62,12 @@ public class OverlayController {
     stage.setX(0);
     stage.setY(0);
 
+    escPressed = false;
+    final Template template = config.getTemplate();
     Pane root = new Pane();
     root.setPadding(new Insets(10));
     Scene scene = new Scene(root);
-    Label label = new Label("Press esc to exit");
+    Label label = new Label("Using " + template.getId() + " by " + template.getAuthor() + "\nPress esc twice to exit");
 
     Rectangle2D points = config.getDspBounds();
     Rectangle wireframe = new Rectangle(points.getMinX(), points.getMinY(), points.getWidth(), points.getHeight());
@@ -123,14 +132,42 @@ public class OverlayController {
 
     // press esc to close
     scene.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if(KeyCode.ESCAPE == keyEvent.getCode()) {
-        logger.info("Escape pressed, exiting");
-        listener.stopListener();
-        stage.close();
-      } else if (SHOW_DEBUG_KEY.match(keyEvent)) {
+      boolean escapeEvent = KeyCode.ESCAPE == keyEvent.getCode();
+      if(escapeEvent && this.escPressed) {
+        logger.info("Escape pressed");
+          listener.stopListener();
+          stage.close();
+      } else if (escapeEvent) {
+        label.setText("Press esc again to exit");
+        this.escPressed = true;
+        return;
+      } else {
+        this.escPressed = false;
+      }
+
+      if (SHOW_DEBUG_KEY.match(keyEvent)) {
+        logger.info("Show debug");
         // Shift + Tab will show/hide the wireframe
         showDebug = !showDebug;
         wireframe.setVisible(showDebug);
+
+        label.setText("Toggle wireframe");
+      } else if (RECONFIGURE_SCREEN.match(keyEvent)) {
+        logger.info("Reconfigure screen");
+        Rectangle2D newPoints = ScreenIdentifierService.getInstance().getScreenSize(config.getTemplate().getWindowName());
+        config.setDspBounds(newPoints);
+
+        // recompute template
+        navigator.recomputeAppBounds(config.getDspBounds());
+
+        // reconfigure wireframe
+        wireframe.setX(newPoints.getMinX());
+        wireframe.setY(newPoints.getMinY());
+        wireframe.setWidth(newPoints.getWidth());
+        wireframe.setHeight(newPoints.getHeight());
+
+        // user should move the cursor manually, so it goes to the correct position
+        label.setText("Updated app size / position.");
       }
     });
     stage.show();
